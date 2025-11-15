@@ -7,6 +7,7 @@ import VideoGameDesign from './components/VideoGameDesign';
 import MouseSkillsChallenge from './components/activities/MouseSkillsChallenge';
 import KeyboardAdventure from './components/activities/KeyboardAdventure';
 import DigitalArtStudio from './components/activities/DigitalArtStudio';
+import ScavengerHunt from './components/activities/ScavengerHunt';
 import './App.css';
 
 function Navigation() {
@@ -17,7 +18,7 @@ function Navigation() {
       <div className="nav-container">
         <Link to="/" className="logo">
           <span className="logo-icon">🎮</span>
-          <span className="logo-text">Ford Douglas Camps</span>
+          <span className="logo-text">Douglas Kids Camps</span>
         </Link>
         <div className="nav-links">
           <Link 
@@ -63,6 +64,7 @@ function App() {
           <Route path="/activities/mouse-skills" element={<MouseSkillsChallenge />} />
           <Route path="/activities/keyboard-adventure" element={<KeyboardAdventure />} />
           <Route path="/activities/digital-art-studio" element={<DigitalArtStudio />} />
+          <Route path="/activities/scavenger-hunt" element={<ScavengerHunt />} />
         </Routes>
       </div>
     </Router>

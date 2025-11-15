@@ -74,7 +74,7 @@
 
 .cta-button.primary {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-  color: #667eea;
+  color: #3b88f5;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.3);
   position: relative;
@@ -228,7 +228,7 @@
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  background: linear-gradient(90deg, #3b88f5, #6594e0, #2563eb);
   transform: scaleX(0);
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 35px 35px 0 0;
@@ -299,7 +299,7 @@
 }
 
 .age-range {
-  color: #667eea;
+  color: #3b88f5;
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 1.1rem;
@@ -319,7 +319,7 @@
 }
 
 .feature {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b88f5 0%, #6594e0 100%);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 25px;
@@ -352,7 +352,7 @@
   bottom: 2rem;
   right: 2rem;
   font-size: 2rem;
-  color: #667eea;
+  color: #3b88f5;
   transition: transform 0.3s ease;
 }
 

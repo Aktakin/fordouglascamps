@@ -1,4 +1,4 @@
-# Ford Douglas Camps - Kids Coding Website
+# Douglas Kids Camps - Kids Coding Website
 
 An exciting and sophisticated website for kids camp featuring three amazing categories:
 

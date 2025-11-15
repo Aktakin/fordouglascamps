@@ -506,7 +506,7 @@ function MouseSkillsChallenge() {
 
 
   const computerParts = [
-    { id: 1, emoji: '🖥️', name: 'Monitor', color: '#667eea', targetZone: 'monitor', description: 'Shows everything on screen!' },
+    { id: 1, emoji: '🖥️', name: 'Monitor', color: '#3b88f5', targetZone: 'monitor', description: 'Shows everything on screen!' },
     { id: 2, emoji: '⌨️', name: 'Keyboard', color: '#4ecdc4', targetZone: 'keyboard', description: 'Type letters and numbers!' },
     { id: 3, emoji: '🖱️', name: 'Mouse', color: '#ffe66d', targetZone: 'mouse', description: 'Click and move things!' },
     { id: 4, emoji: '💻', name: 'Computer', color: '#ff6b6b', targetZone: 'computer', description: 'The brain of your PC!' },

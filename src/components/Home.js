@@ -9,7 +9,7 @@ function Home() {
         <div className="hero-content">
           <h1 className="hero-title">
             <span className="title-line">Welcome to</span>
-            <span className="title-main">Ford Douglas Camps!</span>
+            <span className="title-main">Douglas Kids Camps!</span>
           </h1>
           <p className="hero-subtitle">
             Where coding meets creativity and fun! Join us for an amazing adventure 
@@ -85,31 +85,6 @@ function Home() {
         </div>
       </div>
 
-      <div className="why-section">
-        <h2 className="section-title">Why Choose Our Camps?</h2>
-        <div className="why-grid">
-          <div className="why-card">
-            <div className="why-icon">🌟</div>
-            <h4>Fun Learning</h4>
-            <p>Every lesson is designed to be exciting and engaging!</p>
-          </div>
-          <div className="why-card">
-            <div className="why-icon">👥</div>
-            <h4>Small Groups</h4>
-            <p>Personal attention for every camper</p>
-          </div>
-          <div className="why-card">
-            <div className="why-icon">🏆</div>
-            <h4>Certificates</h4>
-            <p>Earn certificates as you complete each level</p>
-          </div>
-          <div className="why-card">
-            <div className="why-icon">🎁</div>
-            <h4>Take Home Projects</h4>
-            <p>Keep all your creations and show them off!</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
