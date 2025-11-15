@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './ProgrammingAdventure.css';
 
@@ -122,6 +122,29 @@ function ProgrammingAdventure() {
                 <div className="topic-arrow">→</div>
               </div>
             ))}
+            
+            {/* Final Round Maze */}
+            <Link 
+              to="/activities/final-round-maze"
+              className="topic-card final-round-card"
+              style={{ 
+                borderColor: '#ff6b6b',
+                background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.2) 100%)',
+                textDecoration: 'none',
+                display: 'block'
+              }}
+            >
+              <div className="topic-icon" style={{ color: '#ff6b6b', fontSize: '3rem' }}>
+                🎯
+              </div>
+              <h3>Final Round - Maze Adventure</h3>
+              <p>Use ALL your programming skills! Create a character, navigate mazes with loops, if/else, and functions!</p>
+              <div className="topic-badge" style={{ background: '#ff6b6b' }}>10 Levels</div>
+              <div className="topic-badge" style={{ background: 'rgba(255, 107, 107, 0.3)', marginTop: '0.5rem' }}>
+                Multiple Themes
+              </div>
+              <div className="topic-arrow">→</div>
+            </Link>
           </div>
         </div>
       </div>
@@ -1425,8 +1448,90 @@ function getLoopLevels(language) {
 
 function TopicTeaching({ topic, language, topicData, onStart, onBack }) {
   const isJS = language === 'javascript';
+  
+  // All hooks must be declared at the top level - they are called unconditionally
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [varName, setVarName] = useState('name');
+  const [varValue, setVarValue] = useState('Tunde');
+  const [varAge, setVarAge] = useState('10');
+  const [isDay, setIsDay] = useState(true);
+  const [timeInput, setTimeInput] = useState('12');
+  const [selectedFunction, setSelectedFunction] = useState('greet');
+  const [funcInput1, setFuncInput1] = useState('Tunde');
+  const [funcInput2, setFuncInput2] = useState('3');
+  const [funcOutput, setFuncOutput] = useState('');
+  const [loopCount, setLoopCount] = useState(3);
+  const [isLooping, setIsLooping] = useState(false);
+  const [currentIteration, setCurrentIteration] = useState(0);
+  const [iterations, setIterations] = useState([]);
+  const loopIntervalRef = useRef(null);
+
+  // Function to calculate output for functions demo
+  const calculateOutput = () => {
+    if (selectedFunction === 'greet') {
+      setFuncOutput(`"Hello, ${funcInput1}!"`);
+    } else if (selectedFunction === 'add') {
+      const num1 = parseInt(funcInput1) || 0;
+      const num2 = parseInt(funcInput2) || 0;
+      setFuncOutput(String(num1 + num2));
+    } else if (selectedFunction === 'multiply') {
+      const num1 = parseInt(funcInput1) || 0;
+      const num2 = parseInt(funcInput2) || 0;
+      setFuncOutput(String(num1 * num2));
+    }
+  };
+
+  useEffect(() => {
+    if (topic === 'functions') {
+      calculateOutput();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFunction, funcInput1, funcInput2, topic]);
+
+  // Handle time change for conditionals
+  const handleTimeChange = (e) => {
+    const time = parseInt(e.target.value) || 12;
+    setTimeInput(e.target.value);
+    setIsDay(time >= 6 && time < 18);
+  };
+
+  // Start loop animation
+  const startLoop = () => {
+    // Clear any existing interval
+    if (loopIntervalRef.current) {
+      clearInterval(loopIntervalRef.current);
+    }
+    
+    setIsLooping(true);
+    setCurrentIteration(0);
+    setIterations([]);
+    
+    let count = 0;
+    loopIntervalRef.current = setInterval(() => {
+      count++;
+      setCurrentIteration(count);
+      setIterations(prev => [...prev, count]);
+      
+      if (count >= loopCount) {
+        clearInterval(loopIntervalRef.current);
+        loopIntervalRef.current = null;
+        setIsLooping(false);
+      }
+    }, 800);
+  };
+
+  // Cleanup interval on unmount or topic change
+  useEffect(() => {
+    return () => {
+      if (loopIntervalRef.current) {
+        clearInterval(loopIntervalRef.current);
+        loopIntervalRef.current = null;
+      }
+    };
+  }, [topic]);
 
   if (topic === 'variables') {
+
     return (
       <div className="programming-adventure">
         <div className="activity-header">
@@ -1445,6 +1550,63 @@ function TopicTeaching({ topic, language, topicData, onStart, onBack }) {
                 Variables are like labeled boxes that store information! 
                 Use simple names like "name" (not "myName") so it works for everyone.
               </p>
+            </div>
+
+            <div className="concept-demo-box">
+              <h3>🎮 Try It Yourself!</h3>
+              <p className="concept-description">Edit the values below and see the variable boxes update!</p>
+              
+              <div className="interactive-variable-demo">
+                <div className="variable-controls">
+                  <div className="control-group">
+                    <label>Variable Name:</label>
+                    <input
+                      type="text"
+                      className="concept-input"
+                      value={varName}
+                      onChange={(e) => setVarName(e.target.value)}
+                      placeholder="name"
+                    />
+                  </div>
+                  <div className="control-group">
+                    <label>Variable Value (Text):</label>
+                    <input
+                      type="text"
+                      className="concept-input"
+                      value={varValue}
+                      onChange={(e) => setVarValue(e.target.value)}
+                      placeholder="Tunde"
+                    />
+                  </div>
+                  <div className="control-group">
+                    <label>Variable Value (Number):</label>
+                    <input
+                      type="number"
+                      className="concept-input"
+                      value={varAge}
+                      onChange={(e) => setVarAge(e.target.value)}
+                      placeholder="10"
+                    />
+                  </div>
+                </div>
+
+                <div className="variable-display-demo">
+                  <div className="variable-box-demo">
+                    <div className="variable-label-demo">{varName}</div>
+                    <div className="variable-value-demo">{varValue}</div>
+                    <div className="variable-type-demo">text</div>
+                  </div>
+                  <div className="variable-box-demo" style={{ marginLeft: '1rem' }}>
+                    <div className="variable-label-demo">age</div>
+                    <div className="variable-value-demo">{varAge}</div>
+                    <div className="variable-type-demo">number</div>
+                  </div>
+                </div>
+
+                <div className="concept-explanation">
+                  <p>💡 <strong>See how it works:</strong> When you change the name or value above, the variable box updates instantly! This is how variables work in code - they store information that can change.</p>
+                </div>
+              </div>
             </div>
 
             <div className="variable-explorer-teaching">
@@ -1502,6 +1664,7 @@ print(name)`}
   }
 
   if (topic === 'conditionals') {
+
     return (
       <div className="programming-adventure">
         <div className="activity-header">
@@ -1520,6 +1683,73 @@ print(name)`}
                 If/Else statements help your code make decisions! 
                 Think of them like choosing between two paths.
               </p>
+            </div>
+
+            <div className="concept-demo-box">
+              <h3>🌙 Day & Night Demo</h3>
+              <p className="concept-description">Change the time below and watch the scene change!</p>
+              
+              <div className="interactive-conditional-demo">
+                  <div className="conditional-controls">
+                  <div className="control-group">
+                    <label>Time (0-23):</label>
+                    <input
+                      type="number"
+                      className="concept-input"
+                      value={timeInput}
+                      onChange={(e) => {
+                        const time = parseInt(e.target.value) || 12;
+                        setTimeInput(e.target.value);
+                        setIsDay(time >= 6 && time < 18);
+                      }}
+                      min="0"
+                      max="23"
+                      placeholder="12"
+                    />
+                  </div>
+                  <button 
+                    className="toggle-day-night-btn"
+                    onClick={() => setIsDay(!isDay)}
+                  >
+                    {isDay ? '🌙 Switch to Night' : '☀️ Switch to Day'}
+                  </button>
+                </div>
+
+                <div 
+                  className="day-night-scene"
+                  style={{
+                    background: isDay 
+                      ? 'linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%)'
+                      : 'linear-gradient(to bottom, #191970 0%, #000033 50%, #2F4F2F 100%)',
+                    transition: 'all 0.5s ease'
+                  }}
+                >
+                  <div className="sky-elements">
+                    {isDay ? (
+                      <span className="sun" style={{ animation: 'float 3s ease-in-out infinite' }}>☀️</span>
+                    ) : (
+                      <>
+                        <span className="moon" style={{ animation: 'float 3s ease-in-out infinite' }}>🌙</span>
+                        <div className="stars">
+                          {[1, 2, 3, 4, 5].map(i => (
+                            <span key={i} className="star" style={{ '--i': i }}>⭐</span>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="ground" style={{
+                    background: isDay ? 'rgba(34, 139, 34, 0.8)' : 'rgba(0, 50, 0, 0.8)',
+                    transition: 'all 0.5s ease'
+                  }}>
+                    {isDay ? '☀️ It\'s Daytime!' : '🌙 It\'s Nighttime!'}
+                  </div>
+                </div>
+
+                <div className="concept-explanation">
+                  <p>💡 <strong>See how it works:</strong> When time is between 6 and 18, it's day (if condition is true). Otherwise, it's night (else condition). The scene changes automatically based on your input!</p>
+                </div>
+              </div>
             </div>
 
             <div className="conditional-visual">
@@ -1582,6 +1812,7 @@ else:
   }
 
   if (topic === 'functions') {
+
     return (
       <div className="programming-adventure">
         <div className="activity-header">
@@ -1600,6 +1831,75 @@ else:
                 Functions are reusable blocks of code! 
                 They take inputs, do something, and give you an output.
               </p>
+            </div>
+
+            <div className="concept-demo-box">
+              <h3>🎮 Try It Yourself!</h3>
+              <p className="concept-description">Choose a function and change the inputs to see the output!</p>
+              
+              <div className="interactive-function-demo">
+                <div className="function-selector">
+                  <button 
+                    className={`func-select-btn ${selectedFunction === 'greet' ? 'active' : ''}`}
+                    onClick={() => setSelectedFunction('greet')}
+                  >
+                    greet()
+                  </button>
+                  <button 
+                    className={`func-select-btn ${selectedFunction === 'add' ? 'active' : ''}`}
+                    onClick={() => setSelectedFunction('add')}
+                  >
+                    add()
+                  </button>
+                  <button 
+                    className={`func-select-btn ${selectedFunction === 'multiply' ? 'active' : ''}`}
+                    onClick={() => setSelectedFunction('multiply')}
+                  >
+                    multiply()
+                  </button>
+                </div>
+
+                <div className="function-machine">
+                  <div className="function-name-display">{selectedFunction}()</div>
+                  <div className="function-flow">
+                    <div className="input-area">
+                      <label>Input 1:</label>
+                      <input
+                        type="text"
+                        className="concept-input"
+                        value={funcInput1}
+                        onChange={(e) => {
+                          setFuncInput1(e.target.value);
+                        }}
+                        placeholder={selectedFunction === 'greet' ? 'Tunde' : '5'}
+                      />
+                      {selectedFunction !== 'greet' && (
+                        <>
+                          <label style={{ marginTop: '0.5rem' }}>Input 2:</label>
+                          <input
+                            type="number"
+                            className="concept-input"
+                            value={funcInput2}
+                            onChange={(e) => {
+                              setFuncInput2(e.target.value);
+                            }}
+                            placeholder="3"
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div className="arrow-machine">→</div>
+                    <div className="output-area">
+                      <label>Output:</label>
+                      <div className="function-output-demo">{funcOutput || '...'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="concept-explanation">
+                  <p>💡 <strong>See how it works:</strong> Functions take inputs (parameters), process them, and return an output. Change the inputs above and watch the output update automatically!</p>
+                </div>
+              </div>
             </div>
 
             <div className="function-visual">
@@ -1660,6 +1960,7 @@ greet("Tunde")`}
   }
 
   if (topic === 'loops') {
+
     return (
       <div className="programming-adventure">
         <div className="activity-header">
@@ -1680,11 +1981,76 @@ greet("Tunde")`}
               </p>
             </div>
 
+            <div className="concept-demo-box">
+              <h3>🔄 Circular Loop Animation</h3>
+              <p className="concept-description">Set how many times to loop and watch it go round and round!</p>
+              
+              <div className="interactive-loop-demo">
+                <div className="loop-controls">
+                  <div className="control-group">
+                    <label>Number of Loops:</label>
+                    <input
+                      type="number"
+                      className="concept-input"
+                      value={loopCount}
+                      onChange={(e) => setLoopCount(Math.max(1, parseInt(e.target.value) || 1))}
+                      min="1"
+                      max="10"
+                      disabled={isLooping}
+                    />
+                  </div>
+                  <button 
+                    className="start-loop-btn"
+                    onClick={startLoop}
+                    disabled={isLooping}
+                  >
+                    {isLooping ? '🔄 Looping...' : '▶️ Start Loop'}
+                  </button>
+                </div>
+
+                <div className="loop-visual">
+                  <div className="loop-track">
+                    <div 
+                      className="loop-circle"
+                      style={{
+                        transform: isLooping 
+                          ? `rotate(${currentIteration * (360 / loopCount)}deg)`
+                          : 'rotate(0deg)',
+                        transition: isLooping ? 'transform 0.8s ease-in-out' : 'none'
+                      }}
+                    >
+                      {isLooping ? '🔄' : '⭕'}
+                    </div>
+                  </div>
+                  
+                  {isLooping && (
+                    <div className="iteration-display">
+                      Iteration: {currentIteration} / {loopCount}
+                    </div>
+                  )}
+                  
+                  {iterations.length > 0 && (
+                    <div className="iteration-marker">
+                      {iterations.map((iter, idx) => (
+                        <span key={idx} className="marker-dot" style={{ '--i': idx }}>
+                          {iter}️⃣
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="concept-explanation">
+                  <p>💡 <strong>See how it works:</strong> The loop repeats {loopCount} times, going around in a circle. Each time it completes one full circle, that's one iteration. This is how loops work - they repeat code multiple times!</p>
+                </div>
+              </div>
+            </div>
+
             <div className="loop-visual-teaching">
               <div className="loop-example">
-                <div className="loop-item">1️⃣</div>
-                <div className="loop-item">2️⃣</div>
-                <div className="loop-item">3️⃣</div>
+                <div className="loop-item" style={{ '--i': 0 }}>1️⃣</div>
+                <div className="loop-item" style={{ '--i': 1 }}>2️⃣</div>
+                <div className="loop-item" style={{ '--i': 2 }}>3️⃣</div>
                 <div className="loop-arrow">→</div>
                 <div className="loop-result">Done!</div>
               </div>

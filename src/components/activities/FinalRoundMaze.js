@@ -52,6 +52,8 @@ function FinalRoundMaze() {
   const [characterColor, setCharacterColor] = useState('#3b88f5');
   const [userCode, setUserCode] = useState('');
   const [output, setOutput] = useState('');
+  const [codeMode, setCodeMode] = useState('blocks'); // 'blocks' or 'code'
+  const [blocks, setBlocks] = useState([]); // Array of block objects
   const [gameState, setGameState] = useState('theme-selection'); // theme-selection, character-creation, playing, level-complete
   const [maze, setMaze] = useState([]);
   const [playerPos, setPlayerPos] = useState({ x: 0, y: 0 });
@@ -63,45 +65,133 @@ function FinalRoundMaze() {
   const levelData = [
     {
       level: 1,
-      title: "First Steps",
-      description: "Create your character and move to the goal!",
+      title: "Your First Step",
+      description: "Just move forward to reach the goal! Super easy!",
       maze: [
-        ['W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'G', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W']
+        ['W', 'W', 'W', 'W', 'W'],
+        ['W', 'P', 'P', 'G', 'W'],
+        ['W', 'W', 'W', 'W', 'W']
       ],
-      startingCode: `// Step 1: Create your character using variables
-let name = "";
-let color = "";
-
-// Step 2: Use a loop to move forward
-for (let i = 0; i < 4; i++) {
-  moveForward();
-}
-
-// Step 3: Turn right and move
-turnRight();
+      startingCode: `// Just move forward 2 times!
 moveForward();
 moveForward();`,
-      tip: "💡 Use variables to store your character's name and color! Then use a loop to repeat movements.",
-      maxMoves: 20,
-      concepts: ['variables', 'loops']
+      tip: "💡 Click the \"Move Forward\" block twice, or type moveForward(); two times!",
+      maxMoves: 5,
+      concepts: ['basics']
     },
     {
       level: 2,
-      title: "Turn and Move",
-      description: "Navigate around corners using turns!",
+      title: "A Little Further",
+      description: "Move forward a bit more to reach the goal!",
+      maze: [
+        ['W', 'W', 'W', 'W', 'W', 'W'],
+        ['W', 'P', 'P', 'P', 'G', 'W'],
+        ['W', 'W', 'W', 'W', 'W', 'W']
+      ],
+      startingCode: `// Move forward 3 times
+moveForward();
+moveForward();
+moveForward();`,
+      tip: "💡 Try using a \"Repeat\" block set to 3! Or just add more moveForward() blocks.",
+      maxMoves: 8,
+      concepts: ['basics', 'loops']
+    },
+    {
+      level: 3,
+      title: "Turn Around",
+      description: "Move forward, then turn right, then move to the goal!",
+      maze: [
+        ['W', 'W', 'W', 'W', 'W', 'W'],
+        ['W', 'P', 'P', 'W', 'G', 'W'],
+        ['W', 'P', 'P', 'P', 'P', 'W'],
+        ['W', 'W', 'W', 'W', 'W', 'W']
+      ],
+      startingCode: `// Move forward, turn right, then move forward
+moveForward();
+moveForward();
+turnRight();
+moveForward();
+moveForward();`,
+      tip: "💡 First move forward 2 times, then turn right, then move forward 2 more times!",
+      maxMoves: 10,
+      concepts: ['basics', 'turns']
+    },
+    {
+      level: 4,
+      title: "Using Loops",
+      description: "Use a loop to repeat movements!",
       maze: [
         ['W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'W', 'P', 'W'],
-        ['W', 'P', 'W', 'P', 'W', 'P', 'W'],
-        ['W', 'P', 'W', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'W', 'G', 'W'],
+        ['W', 'P', 'P', 'P', 'P', 'G', 'W'],
         ['W', 'W', 'W', 'W', 'W', 'W', 'W']
       ],
-      startingCode: `// Use loops and turns to navigate
+      startingCode: `// Use a loop to move forward 4 times
+for (let i = 0; i < 4; i++) {
+  moveForward();
+}`,
+      tip: "💡 Use a \"Repeat\" block set to 4! Loops help you repeat actions without writing the same code many times.",
+      maxMoves: 8,
+      concepts: ['loops']
+    },
+    {
+      level: 5,
+      title: "Loops and Turns",
+      description: "Use loops with turns to navigate!",
+      maze: [
+        ['W', 'W', 'W', 'W', 'W', 'W', 'W'],
+        ['W', 'P', 'P', 'P', 'W', 'G', 'W'],
+        ['W', 'P', 'W', 'P', 'W', 'P', 'W'],
+        ['W', 'P', 'P', 'P', 'P', 'P', 'W'],
+        ['W', 'W', 'W', 'W', 'W', 'W', 'W']
+      ],
+      startingCode: `// Move forward in a loop, then turn
+for (let i = 0; i < 3; i++) {
+  moveForward();
+}
+turnRight();
+for (let i = 0; i < 2; i++) {
+  moveForward();
+}`,
+      tip: "💡 Use a loop to move forward, then turn, then use another loop! This helps you navigate corners.",
+      maxMoves: 12,
+      concepts: ['loops', 'turns']
+    },
+    {
+      level: 6,
+      title: "Check for Walls",
+      description: "Use if/else to check if you can move forward!",
+      maze: [
+        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+        ['W', 'P', 'P', 'P', 'P', 'P', 'G', 'W'],
+        ['W', 'P', 'W', 'W', 'W', 'W', 'P', 'W'],
+        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
+        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
+      ],
+      startingCode: `// Use if/else to check for walls
+for (let i = 0; i < 8; i++) {
+  if (canMoveForward()) {
+    moveForward();
+  } else {
+    turnRight();
+    moveForward();
+  }
+}`,
+      tip: "💡 Use an \"If/Else\" block with \"Can Move Forward\"! If you can move, go forward. Otherwise, turn and move.",
+      maxMoves: 15,
+      concepts: ['if-else', 'loops']
+    },
+    {
+      level: 7,
+      title: "More Turns",
+      description: "Navigate with multiple turns!",
+      maze: [
+        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+        ['W', 'P', 'P', 'P', 'W', 'P', 'P', 'W'],
+        ['W', 'P', 'W', 'P', 'W', 'P', 'P', 'W'],
+        ['W', 'P', 'P', 'P', 'P', 'P', 'G', 'W'],
+        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
+      ],
+      startingCode: `// Move, turn, move, turn, move
 for (let i = 0; i < 3; i++) {
   moveForward();
 }
@@ -113,39 +203,14 @@ turnRight();
 for (let i = 0; i < 3; i++) {
   moveForward();
 }`,
-      tip: "💡 Combine loops with turnRight() and turnLeft() to navigate corners!",
-      maxMoves: 25,
-      concepts: ['loops', 'functions']
+      tip: "💡 Combine loops with turns! Move in a loop, turn, move in another loop, turn again, and move!",
+      maxMoves: 18,
+      concepts: ['loops', 'turns']
     },
     {
-      level: 3,
-      title: "If Walls Ahead",
-      description: "Use if/else to check for walls!",
-      maze: [
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'G', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
-      ],
-      startingCode: `// Use if/else to check for walls
-for (let i = 0; i < 6; i++) {
-  if (canMoveForward()) {
-    moveForward();
-  } else {
-    turnRight();
-    moveForward();
-  }
-}`,
-      tip: "💡 Use if/else with canMoveForward() to check if there's a wall before moving!",
-      maxMoves: 30,
-      concepts: ['loops', 'if-else']
-    },
-    {
-      level: 4,
+      level: 8,
       title: "Smart Navigation",
-      description: "Combine all concepts to navigate!",
+      description: "Use if/else to check multiple directions!",
       maze: [
         ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
         ['W', 'P', 'P', 'P', 'W', 'P', 'P', 'P', 'W'],
@@ -156,87 +221,7 @@ for (let i = 0; i < 6; i++) {
         ['W', 'P', 'W', 'W', 'W', 'W', 'W', 'G', 'W'],
         ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
       ],
-      startingCode: `// Create a function to move smartly
-function moveSmart() {
-  if (canMoveForward()) {
-    moveForward();
-  } else {
-    turnRight();
-    if (canMoveForward()) {
-      moveForward();
-    } else {
-      turnLeft();
-      turnLeft();
-      moveForward();
-    }
-  }
-}
-
-// Use a loop to keep moving
-for (let i = 0; i < 15; i++) {
-  moveSmart();
-}`,
-      tip: "💡 Create functions to make your code reusable! Functions help organize your movement logic.",
-      maxMoves: 35,
-      concepts: ['functions', 'if-else', 'loops']
-    },
-    {
-      level: 5,
-      title: "Complex Maze",
-      description: "Navigate a more complex path!",
-      maze: [
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'W', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'P', 'W', 'P', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'W', 'W', 'W', 'P', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'G', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
-      ],
-      startingCode: `// Use variables to track direction
-let steps = 0;
-let direction = "forward";
-
-// Create a navigation function
-function navigate() {
-  if (canMoveForward()) {
-    moveForward();
-    steps = steps + 1;
-  } else {
-    turnRight();
-    if (canMoveForward()) {
-      moveForward();
-      steps = steps + 1;
-    }
-  }
-}
-
-// Loop until you reach the goal
-while (steps < 20) {
-  navigate();
-}`,
-      tip: "💡 Use variables to track your progress! Combine while loops with if/else for smart navigation.",
-      maxMoves: 40,
-      concepts: ['variables', 'loops', 'if-else', 'functions']
-    },
-    {
-      level: 6,
-      title: "Dead Ends",
-      description: "Handle dead ends with smart logic!",
-      maze: [
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'W', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'P', 'W', 'P', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'W', 'W', 'W', 'P', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'G', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
-      ],
-      startingCode: `// Function to check all directions
+      startingCode: `// Check multiple directions
 function findPath() {
   if (canMoveForward()) {
     moveForward();
@@ -254,92 +239,12 @@ function findPath() {
 }
 
 // Keep moving
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < 20; i++) {
   findPath();
 }`,
-      tip: "💡 Check multiple directions using else if! This helps you find the right path when you hit a dead end.",
-      maxMoves: 45,
+      tip: "💡 Create a function to check all directions! Use if/else to try forward, right, left, or turn around.",
+      maxMoves: 30,
       concepts: ['functions', 'if-else', 'loops']
-    },
-    {
-      level: 7,
-      title: "Spiral Challenge",
-      description: "Navigate a spiral pattern!",
-      maze: [
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W', 'P', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'P', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'G', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
-      ],
-      startingCode: `// Use nested loops for complex patterns
-let distance = 10;
-
-for (let side = 0; side < 4; side++) {
-  for (let step = 0; step < distance; step++) {
-    if (canMoveForward()) {
-      moveForward();
-    } else {
-      break;
-    }
-  }
-  turnRight();
-  distance = distance - 2;
-}`,
-      tip: "💡 Nested loops (loops inside loops) help you create patterns! Use variables to control the pattern size.",
-      maxMoves: 50,
-      concepts: ['nested-loops', 'variables', 'if-else']
-    },
-    {
-      level: 8,
-      title: "Multi-Path Maze",
-      description: "Choose the right path!",
-      maze: [
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'W', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'P', 'W', 'P', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'W', 'W', 'W', 'P', 'W', 'W', 'W', 'W', 'W', 'P', 'W', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'P', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'P', 'W'],
-        ['W', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'G', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
-      ],
-      startingCode: `// Smart pathfinding function
-function explore() {
-  let tried = 0;
-  
-  while (tried < 4) {
-    if (canMoveForward()) {
-      moveForward();
-      return true;
-    } else {
-      turnRight();
-      tried = tried + 1;
-    }
-  }
-  return false;
-}
-
-// Main navigation loop
-let attempts = 0;
-while (attempts < 40) {
-  if (explore()) {
-    attempts = attempts + 1;
-  } else {
-    turnRight();
-    turnRight();
-    moveForward();
-  }
-}`,
-      tip: "💡 Create functions that return true/false! This helps you track whether your moves are successful.",
-      maxMoves: 55,
-      concepts: ['functions', 'while-loops', 'if-else', 'variables']
     },
     {
       level: 9,
@@ -440,6 +345,10 @@ function smartMove() {
     if (gameState === 'playing') {
       initializeMaze();
       setDirection('right');
+      // Reset blocks and code when level changes
+      setBlocks([]);
+      setUserCode('');
+      setOutput('');
     }
   }, [currentLevel, gameState]);
   
@@ -568,9 +477,54 @@ function smartMove() {
     }
   };
 
+  // Convert blocks to code
+  const blocksToCode = (blockArray) => {
+    let code = '';
+    blockArray.forEach(block => {
+      if (block.type === 'moveForward') {
+        code += 'moveForward();\n';
+      } else if (block.type === 'turnRight') {
+        code += 'turnRight();\n';
+      } else if (block.type === 'turnLeft') {
+        code += 'turnLeft();\n';
+      } else if (block.type === 'loop') {
+        code += `for (let i = 0; i < ${block.count || 1}; i++) {\n`;
+        if (block.children && block.children.length > 0) {
+          const childCode = blocksToCode(block.children);
+          code += childCode.split('\n').map(line => '  ' + line).join('\n');
+        }
+        code += '}\n';
+      } else if (block.type === 'if') {
+        code += `if (${block.condition || 'canMoveForward()'}) {\n`;
+        if (block.children && block.children.length > 0) {
+          const childCode = blocksToCode(block.children);
+          code += childCode.split('\n').map(line => '  ' + line).join('\n');
+        }
+        code += '} else {\n';
+        if (block.elseChildren && block.elseChildren.length > 0) {
+          const childCode = blocksToCode(block.elseChildren);
+          code += childCode.split('\n').map(line => '  ' + line).join('\n');
+        }
+        code += '}\n';
+      } else if (block.type === 'variable') {
+        code += `let ${block.name || 'name'} = "${block.value || ''}";\n`;
+      }
+    });
+    return code;
+  };
+
   const runCode = () => {
     try {
-      const code = userCode || levelData[currentLevel - 1].startingCode;
+      let code;
+      if (codeMode === 'blocks') {
+        code = blocksToCode(blocks);
+        if (!code.trim()) {
+          setOutput('⚠️ Add some blocks to your program first!');
+          return;
+        }
+      } else {
+        code = userCode || levelData[currentLevel - 1].startingCode;
+      }
       
       // Reset direction
       setDirection('right');
@@ -716,6 +670,7 @@ function smartMove() {
                 setGameState('playing');
                 setUserCode('');
                 setOutput('');
+                setBlocks([]);
                 setMoves(0);
               }}
               className="next-level-btn"
@@ -766,8 +721,31 @@ function smartMove() {
         <div className="code-section">
           <div className="code-header">
             <h3>Your Code</h3>
+            <div className="code-mode-toggle">
+              <button
+                className={`mode-btn ${codeMode === 'blocks' ? 'active' : ''}`}
+                onClick={() => setCodeMode('blocks')}
+              >
+                🧱 Blocks
+              </button>
+              <button
+                className={`mode-btn ${codeMode === 'code' ? 'active' : ''}`}
+                onClick={() => setCodeMode('code')}
+              >
+                💻 Code
+              </button>
+            </div>
             <div className="code-actions">
-              <button onClick={() => setUserCode(currentLevelData.startingCode)} className="reset-btn">
+              <button 
+                onClick={() => {
+                  if (codeMode === 'blocks') {
+                    setBlocks([]);
+                  } else {
+                    setUserCode(currentLevelData.startingCode);
+                  }
+                }} 
+                className="reset-btn"
+              >
                 🔄 Reset
               </button>
               <button onClick={runCode} className="run-btn">
@@ -785,13 +763,17 @@ function smartMove() {
             </div>
           )}
 
-          <textarea
-            value={userCode || currentLevelData.startingCode}
-            onChange={(e) => setUserCode(e.target.value)}
-            className="code-editor-maze"
-            placeholder="Write your code here..."
-            spellCheck={false}
-          />
+          {codeMode === 'blocks' ? (
+            <BlockEditor blocks={blocks} setBlocks={setBlocks} />
+          ) : (
+            <textarea
+              value={userCode || currentLevelData.startingCode}
+              onChange={(e) => setUserCode(e.target.value)}
+              className="code-editor-maze"
+              placeholder="Write your code here..."
+              spellCheck={false}
+            />
+          )}
 
           <div className="output-section">
             <h4>Output</h4>
@@ -848,6 +830,177 @@ function smartMove() {
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Block Editor Component
+function BlockEditor({ blocks, setBlocks }) {
+  const [draggedIndex, setDraggedIndex] = useState(null);
+
+  const blockTypes = [
+    { type: 'moveForward', label: 'Move Forward', icon: '⬆️', color: '#3b88f5' },
+    { type: 'turnRight', label: 'Turn Right', icon: '↪️', color: '#4ecdc4' },
+    { type: 'turnLeft', label: 'Turn Left', icon: '↩️', color: '#ffe66d' },
+    { type: 'loop', label: 'Repeat', icon: '🔄', color: '#a78bfa', hasInput: true },
+    { type: 'if', label: 'If/Else', icon: '🔀', color: '#ff6b6b', hasChildren: true },
+    { type: 'variable', label: 'Variable', icon: '📦', color: '#ff8787', hasInput: true, hasValue: true }
+  ];
+
+  const addBlock = (blockType) => {
+    const newBlock = {
+      id: Date.now(),
+      type: blockType.type,
+      ...(blockType.hasInput && { count: 1 }),
+      ...(blockType.hasValue && { name: 'name', value: '' }),
+      ...(blockType.hasChildren && { children: [], elseChildren: [] })
+    };
+    setBlocks([...blocks, newBlock]);
+  };
+
+  const removeBlock = (index) => {
+    setBlocks(blocks.filter((_, i) => i !== index));
+  };
+
+  const updateBlock = (index, updates) => {
+    const newBlocks = [...blocks];
+    newBlocks[index] = { ...newBlocks[index], ...updates };
+    setBlocks(newBlocks);
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedIndex === null) return;
+    
+    const newBlocks = [...blocks];
+    const [removed] = newBlocks.splice(draggedIndex, 1);
+    newBlocks.splice(dropIndex, 0, removed);
+    setBlocks(newBlocks);
+    setDraggedIndex(null);
+  };
+
+  return (
+    <div className="block-editor">
+      <div className="block-palette">
+        <h4>Drag Blocks Here:</h4>
+        <div className="block-palette-grid">
+          {blockTypes.map(blockType => (
+            <div
+              key={blockType.type}
+              className="block-palette-item"
+              onClick={() => addBlock(blockType)}
+              style={{ borderColor: blockType.color }}
+            >
+              <span className="block-icon">{blockType.icon}</span>
+              <span className="block-label">{blockType.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="block-workspace">
+        <h4>Your Program:</h4>
+        {blocks.length === 0 ? (
+          <div className="empty-workspace">
+            <p>👆 Click blocks above to add them to your program!</p>
+            <p>Drag blocks to reorder them</p>
+          </div>
+        ) : (
+          <div className="blocks-container">
+            {blocks.map((block, index) => {
+              const blockType = blockTypes.find(bt => bt.type === block.type);
+              return (
+                <div
+                  key={block.id}
+                  className="code-block"
+                  style={{ borderColor: blockType.color }}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, index)}
+                >
+                  <div className="block-header">
+                    <span className="block-icon">{blockType.icon}</span>
+                    <span className="block-title">{blockType.label}</span>
+                    <button
+                      className="remove-block-btn"
+                      onClick={() => removeBlock(index)}
+                      title="Remove block"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  
+                  {block.type === 'loop' && (
+                    <div className="block-input">
+                      <label>Repeat:</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="20"
+                        value={block.count || 1}
+                        onChange={(e) => updateBlock(index, { count: parseInt(e.target.value) || 1 })}
+                        className="block-number-input"
+                      />
+                      <span>times</span>
+                    </div>
+                  )}
+
+                  {block.type === 'variable' && (
+                    <div className="block-inputs">
+                      <div className="block-input">
+                        <label>Name:</label>
+                        <input
+                          type="text"
+                          value={block.name || 'name'}
+                          onChange={(e) => updateBlock(index, { name: e.target.value })}
+                          className="block-text-input"
+                          placeholder="name"
+                        />
+                      </div>
+                      <div className="block-input">
+                        <label>Value:</label>
+                        <input
+                          type="text"
+                          value={block.value || ''}
+                          onChange={(e) => updateBlock(index, { value: e.target.value })}
+                          className="block-text-input"
+                          placeholder="value"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {block.type === 'if' && (
+                    <div className="block-input">
+                      <label>Condition:</label>
+                      <select
+                        value={block.condition || 'canMoveForward()'}
+                        onChange={(e) => updateBlock(index, { condition: e.target.value })}
+                        className="block-select"
+                      >
+                        <option value="canMoveForward()">Can Move Forward</option>
+                        <option value="canMoveRight()">Can Move Right</option>
+                        <option value="canMoveLeft()">Can Move Left</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
