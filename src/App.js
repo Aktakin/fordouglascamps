@@ -8,6 +8,8 @@ import MouseSkillsChallenge from './components/activities/MouseSkillsChallenge';
 import KeyboardAdventure from './components/activities/KeyboardAdventure';
 import DigitalArtStudio from './components/activities/DigitalArtStudio';
 import ScavengerHunt from './components/activities/ScavengerHunt';
+import ProgrammingAdventure from './components/activities/ProgrammingAdventure';
+import FinalRoundMaze from './components/activities/FinalRoundMaze';
 import './App.css';
 
 function Navigation() {
@@ -65,6 +67,8 @@ function App() {
           <Route path="/activities/keyboard-adventure" element={<KeyboardAdventure />} />
           <Route path="/activities/digital-art-studio" element={<DigitalArtStudio />} />
           <Route path="/activities/scavenger-hunt" element={<ScavengerHunt />} />
+          <Route path="/activities/programming-adventure" element={<ProgrammingAdventure />} />
+          <Route path="/activities/final-round-maze" element={<FinalRoundMaze />} />
         </Routes>
       </div>
     </Router>

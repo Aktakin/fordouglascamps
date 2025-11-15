@@ -259,8 +259,20 @@ function JuniorComputers() {
         </Link>
 
 
+        <Link to="/activities/final-round-maze" className="activity-card-link">
+          <div className="activity-card">
+            <h2>🎯 Final Round - Maze Adventure</h2>
+            <p>Use all your programming skills! Create a character with variables, navigate mazes with loops, if/else, and functions!</p>
+            <div className="activity-preview">
+              <div className="preview-icon">🎮</div>
+              <p className="preview-text">Click to start the ultimate challenge!</p>
+            </div>
+            <div className="card-arrow">→</div>
+          </div>
+        </Link>
+
         <div className="activity-card">
-          <h2>🎯 Final Round</h2>
+          <h2>📝 Final Round Quiz</h2>
           <p>Test what you've learned! Answer questions about computers, mouse skills, and keyboard!</p>
           <FinalRound />
         </div>

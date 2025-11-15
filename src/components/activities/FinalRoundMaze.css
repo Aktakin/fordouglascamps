@@ -1,0 +1,542 @@
+.final-round-maze {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #3b88f5 0%, #6594e0 50%, #2563eb 100%);
+  background-attachment: fixed;
+}
+
+.theme-selection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.theme-selection h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.5rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.theme-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.theme-card:hover::before {
+  opacity: 1;
+}
+
+.theme-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.theme-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.theme-card h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.theme-arrow {
+  font-size: 2rem;
+  color: white;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.character-creation {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.character-form {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 3rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem;
+  color: white;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.character-input {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.character-input:focus {
+  outline: none;
+  border-color: #3b88f5;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.character-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.color-input {
+  width: 100px;
+  height: 60px;
+  border-radius: 15px;
+  border: 3px solid white;
+  cursor: pointer;
+}
+
+.character-preview {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.character-preview h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.preview-character {
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.start-game-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #3b88f5 0%, #6594e0 100%);
+  color: white;
+  border: none;
+  padding: 1.5rem;
+  border-radius: 25px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Fredoka', sans-serif;
+  box-shadow: 0 8px 25px rgba(59, 136, 245, 0.4);
+}
+
+.start-game-btn:hover:not(:disabled) {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(59, 136, 245, 0.5);
+}
+
+.start-game-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.maze-game-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.game-stats {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.game-stats span {
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.tip-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.tip-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.code-section {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.code-header h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.8rem;
+  color: white;
+}
+
+.code-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.reset-btn,
+.run-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 15px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.reset-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.run-btn {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  color: white;
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+.run-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.tip-box {
+  background: rgba(255, 230, 109, 0.2);
+  border: 2px solid #ffe66d;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tip-box p {
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.concepts-used {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.code-editor-maze {
+  width: 100%;
+  min-height: 300px;
+  background: #1e1e1e;
+  color: #a8e6cf;
+  border: 2px solid #333;
+  border-radius: 15px;
+  padding: 1.5rem;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  resize: vertical;
+  margin-bottom: 1.5rem;
+}
+
+.code-editor-maze:focus {
+  outline: none;
+  border-color: #3b88f5;
+}
+
+.output-section {
+  margin-top: 1.5rem;
+}
+
+.output-section h4 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.output-display-maze {
+  background: #1e1e1e;
+  color: #4ecdc4;
+  border: 2px solid #333;
+  border-radius: 15px;
+  padding: 1.5rem;
+  min-height: 100px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.maze-section {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.maze-info h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.maze-info p {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.legend-cell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.maze-display {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.maze-row {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.maze-cell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.maze-cell.wall {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+}
+
+.maze-cell.path {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.maze-cell.character {
+  background: rgba(59, 136, 245, 0.3);
+  border: 2px solid #3b88f5;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.maze-cell.goal {
+  background: rgba(255, 230, 109, 0.3);
+  border: 2px solid #ffe66d;
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 230, 109, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 230, 109, 0.8);
+  }
+}
+
+.level-complete-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.complete-content {
+  background: linear-gradient(135deg, #3b88f5 0%, #6594e0 100%);
+  border-radius: 30px;
+  padding: 4rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 3px solid white;
+  max-width: 600px;
+}
+
+.complete-content h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 3rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.complete-content p {
+  font-size: 1.3rem;
+  color: white;
+  margin: 0.5rem 0;
+}
+
+.next-level-btn,
+.restart-btn {
+  background: white;
+  color: #3b88f5;
+  border: none;
+  padding: 1.2rem 3rem;
+  border-radius: 25px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Fredoka', sans-serif;
+  margin-top: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.next-level-btn:hover,
+.restart-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.final-complete h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.5rem;
+  color: white;
+  margin: 1rem 0;
+}
+
+@media (max-width: 1200px) {
+  .maze-game-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .themes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .maze-cell {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+  
+  .legend {
+    grid-template-columns: 1fr;
+  }
+}
+
