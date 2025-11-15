@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './FinalRoundMaze.css';
 
 const themes = {
@@ -46,6 +46,7 @@ const themes = {
 };
 
 function FinalRoundMaze() {
+  const navigate = useNavigate();
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [currentLevel, setCurrentLevel] = useState(1);
   const [characterName, setCharacterName] = useState('');
@@ -570,9 +571,9 @@ function smartMove() {
     return (
       <div className="final-round-maze">
         <div className="activity-header">
-          <Link to="/junior-computers" className="back-button">
-            ← Back to Activities
-          </Link>
+          <button onClick={() => navigate(-1)} className="back-button">
+            ← Back
+          </button>
           <h1>🎯 Final Round - Maze Adventure</h1>
           <p className="activity-subtitle">Use all your programming skills to navigate mazes!</p>
         </div>

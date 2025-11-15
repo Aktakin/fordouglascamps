@@ -58,7 +58,7 @@ function Home() {
               your computer do amazing things with simple commands.
             </p>
             <div className="card-features">
-              <span className="feature">🐍 Python Basics</span>
+              <span className="feature">🐼 Python Basics</span>
               <span className="feature">🎭 Animations</span>
               <span className="feature">📚 Story Coding</span>
               <span className="feature">🎪 Interactive Projects</span>

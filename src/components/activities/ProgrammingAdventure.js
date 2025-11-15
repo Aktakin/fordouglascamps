@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ProgrammingAdventure.css';
 
 function ProgrammingAdventure() {
+  const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [currentTopic, setCurrentTopic] = useState(null);
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -42,9 +43,9 @@ function ProgrammingAdventure() {
     return (
       <div className="programming-adventure">
         <div className="activity-header">
-          <Link to="/playful-programming" className="back-button">
-            ← Back to Playful Programming
-          </Link>
+          <button onClick={() => navigate(-1)} className="back-button">
+            ← Back
+          </button>
           <h1>💻 Programming Adventure</h1>
           <p className="activity-subtitle">Choose your programming language!</p>
         </div>
@@ -70,7 +71,7 @@ function ProgrammingAdventure() {
               className="language-card"
               onClick={() => setSelectedLanguage('python')}
             >
-              <div className="language-icon">🐍</div>
+              <div className="language-icon">🐼</div>
               <h2>Python</h2>
               <p>Learn Python programming! Great for beginners and used by professionals worldwide.</p>
               <div className="language-features">
@@ -90,9 +91,9 @@ function ProgrammingAdventure() {
     return (
       <div className="programming-adventure">
         <div className="activity-header">
-          <Link to="/playful-programming" className="back-button">
-            ← Back to Playful Programming
-          </Link>
+          <button onClick={() => navigate(-1)} className="back-button">
+            ← Back
+          </button>
           <h1>💻 Programming Adventure</h1>
           <p className="activity-subtitle">Learning {selectedLanguage === 'javascript' ? 'JavaScript' : 'Python'}!</p>
           <button 

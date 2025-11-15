@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ScavengerHunt.css';
 
 function ScavengerHunt() {
+  const navigate = useNavigate();
   const [currentLevel, setCurrentLevel] = useState(1);
   const [foundItems, setFoundItems] = useState([]);
   const [timeRemaining, setTimeRemaining] = useState(60);
@@ -238,9 +239,9 @@ function ScavengerHunt() {
   return (
     <div className="scavenger-hunt">
       <div className="activity-header">
-        <Link to="/junior-computers" className="back-button">
-          ← Back to Activities
-        </Link>
+        <button onClick={() => navigate(-1)} className="back-button">
+          ← Back
+        </button>
         <h1>🔍 Scavenger Hunt</h1>
         <p className="activity-subtitle">Find hidden tech items in 10 exciting levels!</p>
       </div>
@@ -261,9 +262,9 @@ function ScavengerHunt() {
             <div className="feature-item">🏆 Earn points and badges</div>
             <div className="feature-item">🎮 10 challenging levels</div>
           </div>
-          <Link to="/junior-computers" className="back-to-activities-btn">
-            ← Back to Activities
-          </Link>
+          <button onClick={() => navigate(-1)} className="back-to-activities-btn">
+            ← Back
+          </button>
         </div>
       </div>
 

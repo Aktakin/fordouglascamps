@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './DigitalArtStudio.css';
 
 function DigitalArtStudio() {
+  const navigate = useNavigate();
   const [currentLevel, setCurrentLevel] = useState(1);
   const [currentColor, setCurrentColor] = useState('#ff6b6b');
   const [brushSize, setBrushSize] = useState(10);
@@ -196,9 +197,9 @@ function DigitalArtStudio() {
   return (
     <div className="digital-art-studio">
       <div className="activity-header">
-        <Link to="/junior-computers" className="back-button">
-          ← Back to Activities
-        </Link>
+        <button onClick={() => navigate(-1)} className="back-button">
+          ← Back
+        </button>
         <h1>🎨 Digital Art Studio</h1>
         <p className="activity-subtitle">Create amazing art with 10 fun challenges!</p>
       </div>

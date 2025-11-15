@@ -4,6 +4,7 @@ import Home from './components/Home';
 import JuniorComputers from './components/JuniorComputers';
 import PlayfulProgramming from './components/PlayfulProgramming';
 import VideoGameDesign from './components/VideoGameDesign';
+import VideoGameDesignJunior from './components/VideoGameDesignJunior';
 import MouseSkillsChallenge from './components/activities/MouseSkillsChallenge';
 import KeyboardAdventure from './components/activities/KeyboardAdventure';
 import DigitalArtStudio from './components/activities/DigitalArtStudio';
@@ -63,6 +64,7 @@ function App() {
           <Route path="/junior-computers" element={<JuniorComputers />} />
           <Route path="/playful-programming" element={<PlayfulProgramming />} />
           <Route path="/video-game-design" element={<VideoGameDesign />} />
+          <Route path="/video-game-design/junior" element={<VideoGameDesignJunior />} />
           <Route path="/activities/mouse-skills" element={<MouseSkillsChallenge />} />
           <Route path="/activities/keyboard-adventure" element={<KeyboardAdventure />} />
           <Route path="/activities/digital-art-studio" element={<DigitalArtStudio />} />

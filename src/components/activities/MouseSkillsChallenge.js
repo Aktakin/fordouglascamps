@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './MouseSkillsChallenge.css';
 
 function MouseSkillsChallenge() {
+  const navigate = useNavigate();
   const [currentTest, setCurrentTest] = useState('intro'); // intro, leftClick, rightClick, movement, scrollWheel, dragDrop
   const [leftClickScore, setLeftClickScore] = useState(0);
   const [rightClickScore, setRightClickScore] = useState(0);
@@ -581,9 +582,9 @@ function MouseSkillsChallenge() {
   return (
     <div className="mouse-skills-challenge">
       <div className="activity-header">
-        <Link to="/junior-computers" className="back-button">
-          ← Back to Activities
-        </Link>
+        <button onClick={() => navigate(-1)} className="back-button">
+          ← Back
+        </button>
         <h1>🎯 Mouse Skills Challenge</h1>
         <p className="activity-subtitle">Learn and practice using your mouse like a pro!</p>
       </div>

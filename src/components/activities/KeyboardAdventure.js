@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './KeyboardAdventure.css';
 
 const levelData = [
@@ -97,6 +97,7 @@ const levelData = [
   ];
 
 function KeyboardAdventure() {
+  const navigate = useNavigate();
   const [currentLevel, setCurrentLevel] = useState(1);
   const [userInput, setUserInput] = useState('');
   const [currentText, setCurrentText] = useState('');
@@ -395,9 +396,9 @@ function KeyboardAdventure() {
   return (
     <div className="keyboard-adventure">
       <div className="activity-header">
-        <Link to="/junior-computers" className="back-button">
-          ← Back to Activities
-        </Link>
+        <button onClick={() => navigate(-1)} className="back-button">
+          ← Back
+        </button>
         <h1>⌨️ Keyboard Adventure</h1>
         <p className="activity-subtitle">Master typing with 10 exciting levels!</p>
       </div>
@@ -649,9 +650,9 @@ function KeyboardAdventure() {
             <button onClick={resetLevel} className="reset-btn">
               🔄 Reset Level
             </button>
-            <Link to="/junior-computers" className="back-btn">
-              Back to Activities
-            </Link>
+            <button onClick={() => navigate(-1)} className="back-btn">
+              Back
+            </button>
           </div>
         </div>
       ) : (
