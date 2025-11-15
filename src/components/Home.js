@@ -4,8 +4,8 @@ import './Home.css';
 
 function Home() {
   return (
-    <div className="home">
-      <div className="hero-section">
+    <main className="home" role="main">
+      <section className="hero-section" aria-label="Hero section">
         <div className="hero-content">
           <h1 className="hero-title">
             <span className="title-line">Welcome to</span>
@@ -13,7 +13,9 @@ function Home() {
           </h1>
           <p className="hero-subtitle">
             Where coding meets creativity and fun! Join us for an amazing adventure 
-            into the world of computers, programming, and game design.
+            into the world of computers, programming, and game design. Perfect for kids 
+            who want to learn coding, programming, and computer skills through interactive 
+            games and activities.
           </p>
           <div className="hero-buttons">
             <Link to="/junior-computers" className="cta-button primary">
@@ -21,24 +23,25 @@ function Home() {
             </Link>
           </div>
         </div>
-        <div className="hero-illustration">
-          <div className="floating-icon">💻</div>
-          <div className="floating-icon">🎨</div>
-          <div className="floating-icon">🎮</div>
-          <div className="floating-icon">✨</div>
+        <div className="hero-illustration" aria-hidden="true">
+          <div className="floating-icon" aria-label="Computer icon">💻</div>
+          <div className="floating-icon" aria-label="Art icon">🎨</div>
+          <div className="floating-icon" aria-label="Game controller icon">🎮</div>
+          <div className="floating-icon" aria-label="Sparkle icon">✨</div>
         </div>
-      </div>
+      </section>
 
-      <div className="categories-section">
-        <h2 className="section-title">Choose Your Adventure</h2>
-        <div className="categories-grid">
-          <Link to="/junior-computers" className="category-card junior">
-            <div className="card-icon">🖥️</div>
+      <section className="categories-section" aria-label="Kids coding camp programs">
+        <h2 className="section-title">Choose Your Adventure - Kids Coding Camp Programs</h2>
+        <div className="categories-grid" role="list">
+          <Link to="/junior-computers" className="category-card junior" role="listitem">
+            <div className="card-icon" aria-label="Computer monitor icon">🖥️</div>
             <h3>Junior Computers</h3>
             <p className="age-range">Ages 6-9</p>
             <p className="card-description">
               Discover the magic of computers! Learn the basics through fun games, 
-              colorful activities, and interactive adventures.
+              colorful activities, and interactive adventures. Perfect for kids starting 
+              their coding journey with mouse skills, keyboard practice, and digital art.
             </p>
             <div className="card-features">
               <span className="feature">🎯 Mouse Skills</span>
@@ -49,13 +52,14 @@ function Home() {
             <div className="card-arrow">→</div>
           </Link>
 
-          <Link to="/playful-programming" className="category-card programming">
-            <div className="card-icon">💡</div>
+          <Link to="/playful-programming" className="category-card programming" role="listitem">
+            <div className="card-icon" aria-label="Light bulb icon">💡</div>
             <h3>Playful Programming</h3>
             <p className="age-range">Ages 9-13</p>
             <p className="card-description">
               Code your first programs! Build animations, create stories, and make 
-              your computer do amazing things with simple commands.
+              your computer do amazing things with simple commands. Learn Python and 
+              JavaScript programming through interactive coding activities designed for kids.
             </p>
             <div className="card-features">
               <span className="feature">🐼 Python Basics</span>
@@ -66,13 +70,14 @@ function Home() {
             <div className="card-arrow">→</div>
           </Link>
 
-          <Link to="/video-game-design" className="category-card gamedev">
-            <div className="card-icon">🎮</div>
+          <Link to="/video-game-design" className="category-card gamedev" role="listitem">
+            <div className="card-icon" aria-label="Video game controller icon">🎮</div>
             <h3>Video Game Design</h3>
             <p className="age-range">Ages 10-15</p>
             <p className="card-description">
               Create your own video games! Design characters, build levels, and 
-              bring your gaming ideas to life with professional tools.
+              bring your gaming ideas to life with professional tools. Learn game design, 
+              character creation, and interactive game development for kids.
             </p>
             <div className="card-features">
               <span className="feature">🎨 Game Design</span>
@@ -83,9 +88,9 @@ function Home() {
             <div className="card-arrow">→</div>
           </Link>
         </div>
-      </div>
+      </section>
 
-    </div>
+    </main>
   );
 }
 
