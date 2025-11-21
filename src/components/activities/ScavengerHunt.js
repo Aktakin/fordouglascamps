@@ -1,451 +1,308 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './ScavengerHunt.css';
-import { isLevelUnlocked, completeLevel as markLevelComplete } from '../../utils/levelProgress';
 
 function ScavengerHunt() {
-  const navigate = useNavigate();
-  const [currentLevel, setCurrentLevel] = useState(1);
-  const [foundItems, setFoundItems] = useState([]);
-  const [timeRemaining, setTimeRemaining] = useState(60);
-  const [gameActive, setGameActive] = useState(false);
-  const [levelComplete, setLevelComplete] = useState(false);
-  const [score, setScore] = useState(0);
-  const [showHint, setShowHint] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [showMystery, setShowMystery] = useState(false);
+  const [mysteryRevealed, setMysteryRevealed] = useState(false);
+  const [searchItems, setSearchItems] = useState([]);
 
-  const levelData = [
-    {
-      level: 1,
-      title: "Find the Mouse",
-      description: "Find the hidden mouse on the screen!",
-      items: [
-        { id: 1, emoji: '🖱️', name: 'Mouse', x: 75, y: 30, hint: 'Look near the top right!' }
-      ],
-      timeLimit: 60,
-      theme: "🖱️",
-      color: "#ff6b6b"
-    },
-    {
-      level: 2,
-      title: "Find Computer Parts",
-      description: "Find the keyboard and monitor!",
-      items: [
-        { id: 1, emoji: '⌨️', name: 'Keyboard', x: 20, y: 60, hint: 'Check the left side!' },
-        { id: 2, emoji: '🖥️', name: 'Monitor', x: 80, y: 25, hint: 'Look up high!' }
-      ],
-      timeLimit: 60,
-      theme: "💻",
-      color: "#4ecdc4"
-    },
-    {
-      level: 3,
-      title: "Tech Treasure Hunt",
-      description: "Find the laptop, tablet, and phone!",
-      items: [
-        { id: 1, emoji: '💻', name: 'Laptop', x: 15, y: 40, hint: 'Bottom left corner!' },
-        { id: 2, emoji: '📱', name: 'Phone', x: 70, y: 70, hint: 'Right side, down low!' },
-        { id: 3, emoji: '📱', name: 'Tablet', x: 50, y: 15, hint: 'Top center area!' }
-      ],
-      timeLimit: 75,
-      theme: "📱",
-      color: "#ffe66d"
-    },
-    {
-      level: 4,
-      title: "Audio Equipment",
-      description: "Find all the sound devices!",
-      items: [
-        { id: 1, emoji: '🔊', name: 'Speakers', x: 10, y: 50, hint: 'Far left side!' },
-        { id: 2, emoji: '🎧', name: 'Headphones', x: 85, y: 45, hint: 'Right side, middle!' },
-        { id: 3, emoji: '📻', name: 'Radio', x: 45, y: 75, hint: 'Bottom center!' }
-      ],
-      timeLimit: 80,
-      theme: "🔊",
-      color: "#aa96da"
-    },
-    {
-      level: 5,
-      title: "Camera Collection",
-      description: "Find all the cameras!",
-      items: [
-        { id: 1, emoji: '📷', name: 'Camera', x: 25, y: 20, hint: 'Top left quarter!' },
-        { id: 2, emoji: '📹', name: 'Video Camera', x: 75, y: 60, hint: 'Right side, lower!' },
-        { id: 3, emoji: '📸', name: 'Polaroid', x: 50, y: 80, hint: 'Bottom center!' },
-        { id: 4, emoji: '📷', name: 'Webcam', x: 90, y: 15, hint: 'Top right corner!' }
-      ],
-      timeLimit: 90,
-      theme: "📷",
-      color: "#a8e6cf"
-    },
-    {
-      level: 6,
-      title: "Storage Devices",
-      description: "Find all storage devices!",
-      items: [
-        { id: 1, emoji: '💾', name: 'Floppy Disk', x: 15, y: 30, hint: 'Left side, upper!' },
-        { id: 2, emoji: '💿', name: 'CD', x: 60, y: 25, hint: 'Top right area!' },
-        { id: 3, emoji: '📀', name: 'DVD', x: 30, y: 70, hint: 'Left side, lower!' },
-        { id: 4, emoji: '💿', name: 'Blu-ray', x: 80, y: 75, hint: 'Bottom right!' },
-        { id: 5, emoji: '💾', name: 'USB Drive', x: 50, y: 50, hint: 'Center of screen!' }
-      ],
-      timeLimit: 100,
-      theme: "💾",
-      color: "#ff8b94"
-    },
-    {
-      level: 7,
-      title: "Gaming Gear",
-      description: "Find all gaming equipment!",
-      items: [
-        { id: 1, emoji: '🎮', name: 'Game Controller', x: 20, y: 40, hint: 'Left side, middle!' },
-        { id: 2, emoji: '🕹️', name: 'Joystick', x: 70, y: 35, hint: 'Right side, upper!' },
-        { id: 3, emoji: '🎯', name: 'VR Headset', x: 45, y: 20, hint: 'Top center!' },
-        { id: 4, emoji: '🎲', name: 'Gaming Dice', x: 25, y: 75, hint: 'Bottom left!' },
-        { id: 5, emoji: '🎮', name: 'Console', x: 85, y: 65, hint: 'Bottom right!' },
-        { id: 6, emoji: '🕹️', name: 'Arcade Stick', x: 55, y: 80, hint: 'Bottom center-right!' }
-      ],
-      timeLimit: 110,
-      theme: "🎮",
-      color: "#95e1d3"
-    },
-    {
-      level: 8,
-      title: "Smart Devices",
-      description: "Find all smart devices!",
-      items: [
-        { id: 1, emoji: '⌚', name: 'Smartwatch', x: 10, y: 25, hint: 'Top left corner!' },
-        { id: 2, emoji: '📱', name: 'Smartphone', x: 75, y: 40, hint: 'Right side, middle!' },
-        { id: 3, emoji: '📺', name: 'Smart TV', x: 40, y: 15, hint: 'Top left-center!' },
-        { id: 4, emoji: '🏠', name: 'Smart Home', x: 60, y: 70, hint: 'Right side, lower!' },
-        { id: 5, emoji: '💡', name: 'Smart Light', x: 30, y: 55, hint: 'Left side, middle!' },
-        { id: 6, emoji: '🔌', name: 'Smart Plug', x: 85, y: 80, hint: 'Bottom right!' },
-        { id: 7, emoji: '📱', name: 'Tablet', x: 50, y: 45, hint: 'Center area!' }
-      ],
-      timeLimit: 120,
-      theme: "🏠",
-      color: "#f38181"
-    },
-    {
-      level: 9,
-      title: "Complete Tech Setup",
-      description: "Find everything for a complete computer setup!",
-      items: [
-        { id: 1, emoji: '🖥️', name: 'Monitor', x: 20, y: 20, hint: 'Top left!' },
-        { id: 2, emoji: '⌨️', name: 'Keyboard', x: 15, y: 60, hint: 'Left side, lower!' },
-        { id: 3, emoji: '🖱️', name: 'Mouse', x: 80, y: 30, hint: 'Top right!' },
-        { id: 4, emoji: '🔊', name: 'Speakers', x: 25, y: 75, hint: 'Bottom left!' },
-        { id: 5, emoji: '📷', name: 'Webcam', x: 75, y: 15, hint: 'Top right corner!' },
-        { id: 6, emoji: '💻', name: 'Computer', x: 50, y: 50, hint: 'Center!' },
-        { id: 7, emoji: '🎧', name: 'Headphones', x: 85, y: 65, hint: 'Bottom right!' },
-        { id: 8, emoji: '📱', name: 'Phone', x: 60, y: 80, hint: 'Bottom center-right!' }
-      ],
-      timeLimit: 120,
-      theme: "🖥️",
-      color: "#c7ceea"
-    },
-    {
-      level: 10,
-      title: "Ultimate Tech Hunt",
-      description: "Find ALL the tech items! This is the ultimate challenge!",
-      items: [
-        { id: 1, emoji: '🖥️', name: 'Monitor', x: 10, y: 15, hint: 'Top left corner!' },
-        { id: 2, emoji: '⌨️', name: 'Keyboard', x: 20, y: 70, hint: 'Left side, bottom!' },
-        { id: 3, emoji: '🖱️', name: 'Mouse', x: 85, y: 25, hint: 'Top right!' },
-        { id: 4, emoji: '💻', name: 'Laptop', x: 30, y: 40, hint: 'Left-center!' },
-        { id: 5, emoji: '📱', name: 'Phone', x: 70, y: 50, hint: 'Right-center!' },
-        { id: 6, emoji: '🎮', name: 'Controller', x: 15, y: 45, hint: 'Left side, middle!' },
-        { id: 7, emoji: '🎧', name: 'Headphones', x: 80, y: 60, hint: 'Right side, lower!' },
-        { id: 8, emoji: '📷', name: 'Camera', x: 50, y: 20, hint: 'Top center!' },
-        { id: 9, emoji: '💾', name: 'USB', x: 40, y: 75, hint: 'Bottom left-center!' },
-        { id: 10, emoji: '⌚', name: 'Watch', x: 90, y: 80, hint: 'Bottom right corner!' }
-      ],
-      timeLimit: 150,
-      theme: "🏆",
-      color: "#ffd93d"
-    }
+  // Interesting and challenging items to search on Google
+  const allSearchItems = [
+    { name: "Axolotl", hint: "A rare salamander that looks like a Pokemon!", difficulty: "medium", emoji: "🦎" },
+    { name: "Bioluminescent Plankton", hint: "Glowing sea creatures that light up at night!", difficulty: "hard", emoji: "✨" },
+    { name: "Glass Frog", hint: "A frog you can see through!", difficulty: "medium", emoji: "🐸" },
+    { name: "Rainbow Eucalyptus Tree", hint: "A tree with naturally colorful bark!", difficulty: "medium", emoji: "🌳" },
+    { name: "Mantis Shrimp Eyes", hint: "The most colorful eyes in nature!", difficulty: "hard", emoji: "👀" },
+    { name: "Pangolin", hint: "A scaly mammal that rolls into a ball!", difficulty: "medium", emoji: "🦔" },
+    { name: "Narwhal", hint: "The unicorn of the sea!", difficulty: "easy", emoji: "🦄" },
+    { name: "Blue Java Banana", hint: "A banana that tastes like ice cream!", difficulty: "hard", emoji: "🍌" },
+    { name: "Jumping Spider", hint: "The cutest spider with big eyes!", difficulty: "medium", emoji: "🕷️" },
+    { name: "Pink Fairy Armadillo", hint: "The smallest and cutest armadillo!", difficulty: "hard", emoji: "💗" },
+    { name: "Octopus Camouflage", hint: "Watch an octopus change colors!", difficulty: "medium", emoji: "🐙" },
+    { name: "Peacock Spider Dancing", hint: "A tiny spider that dances!", difficulty: "medium", emoji: "🕺" },
+    { name: "Arctic Fox Winter", hint: "A fox that turns white in winter!", difficulty: "easy", emoji: "🦊" },
+    { name: "Hummingbird Nest", hint: "The tiniest nest you've ever seen!", difficulty: "hard", emoji: "🪺" },
+    { name: "Transparent Butterfly Wings", hint: "A butterfly with see-through wings!", difficulty: "hard", emoji: "🦋" }
   ];
 
-  const currentLevelData = levelData.find(l => l.level === currentLevel) || levelData[0];
+  // Mystery box items (special final challenge)
+  const mysteryItems = [
+    { name: "Programmer Working at Night", hint: "Find someone coding in the dark!", emoji: "💻" },
+    { name: "Kids Learning to Code", hint: "Find happy kids learning programming!", emoji: "👦" },
+    { name: "Robot Teaching Class", hint: "Find a robot helping students!", emoji: "🤖" },
+    { name: "Computer Lab Classroom", hint: "Find a classroom full of computers!", emoji: "🏫" }
+  ];
 
   useEffect(() => {
-    if (gameActive && timeRemaining > 0) {
-      const timer = setInterval(() => {
-        setTimeRemaining(prev => {
-          if (prev <= 1) {
-            setGameActive(false);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
+    if (gameStarted && searchItems.length === 0) {
+      // Randomly select 5 items for the hunt
+      const shuffled = [...allSearchItems].sort(() => 0.5 - Math.random());
+      setSearchItems(shuffled.slice(0, 5));
     }
-  }, [gameActive, timeRemaining]);
+  }, [gameStarted]);
 
-  useEffect(() => {
-    if (foundItems.length === currentLevelData.items.length && gameActive) {
-      setGameActive(false);
-      setLevelComplete(true);
-      const timeBonus = Math.max(0, timeRemaining * 10);
-      const levelScore = (currentLevelData.items.length * 100) + timeBonus;
-      setScore(prev => prev + levelScore);
-      // Mark level as completed in localStorage
-      markLevelComplete('scavenger-hunt', currentLevel);
-    }
-  }, [foundItems, currentLevelData.items.length, gameActive, timeRemaining, currentLevel]);
-
-  const startLevel = () => {
-    setFoundItems([]);
-    setTimeRemaining(currentLevelData.timeLimit);
-    setGameActive(true);
-    setLevelComplete(false);
-    setShowHint(false);
+  const handleStartGame = () => {
+    setGameStarted(true);
+    setCurrentItemIndex(0);
+    setUploadedImages([]);
+    setShowMystery(false);
+    setMysteryRevealed(false);
   };
 
-  const handleItemClick = (itemId) => {
-    if (!gameActive || foundItems.includes(itemId)) return;
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newImage = {
+          itemName: searchItems[currentItemIndex].name,
+          imageUrl: reader.result,
+          timestamp: new Date().toLocaleTimeString()
+        };
+        
+        setUploadedImages([...uploadedImages, newImage]);
+        
+        // Move to next item or show mystery box
+        if (currentItemIndex < searchItems.length - 1) {
+          setCurrentItemIndex(currentItemIndex + 1);
+        } else {
+          setShowMystery(true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMysteryImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const mysteryImage = {
+          itemName: "Mystery Item",
+          imageUrl: reader.result,
+          timestamp: new Date().toLocaleTimeString()
+        };
+        setUploadedImages([...uploadedImages, mysteryImage]);
+        setMysteryRevealed(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const getDifficultyColor = (difficulty) => {
+    switch(difficulty) {
+      case 'easy': return '#4ecdc4';
+      case 'medium': return '#ff9a56';
+      case 'hard': return '#ff6b6b';
+      default: return '#667eea';
+    }
+  };
+
+  if (!gameStarted) {
+    return (
+      <div className="scavenger-hunt">
+        <div className="hunt-header">
+          <Link to="/junior-computers" className="back-btn">← Back</Link>
+          <h1>🔍 Google Image Scavenger Hunt</h1>
+        </div>
+
+        <div className="welcome-screen">
+          <div className="welcome-card">
+            <div className="welcome-icon">🕵️‍♂️</div>
+            <h2>Ready for an Adventure?</h2>
+            <p className="welcome-description">
+              Get ready to explore the internet! You'll search for amazing and unusual things on Google, 
+              save the images, and upload them here. Can you find them all?
+            </p>
+
+            <div className="game-rules">
+              <h3>📋 How to Play:</h3>
+              <ol>
+                <li>Read the item you need to find</li>
+                <li>Search for it on <strong>Google Images</strong></li>
+                <li>Right-click the image and <strong>"Save image as..."</strong></li>
+                <li>Come back here and <strong>upload</strong> the image</li>
+                <li>Complete all 5 items to unlock the <strong>Mystery Box</strong>! 🎁</li>
+              </ol>
+            </div>
+
+            <div className="difficulty-legend">
+              <h4>Difficulty Levels:</h4>
+              <div className="legend-items">
+                <span className="legend-item easy">🟢 Easy</span>
+                <span className="legend-item medium">🟡 Medium</span>
+                <span className="legend-item hard">🔴 Hard</span>
+              </div>
+            </div>
+
+            <button onClick={handleStartGame} className="start-hunt-btn">
+              🚀 Start Scavenger Hunt
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (mysteryRevealed) {
+    return (
+      <div className="scavenger-hunt">
+        <div className="hunt-header">
+          <Link to="/junior-computers" className="back-btn">← Back</Link>
+          <h1>🎉 Congratulations!</h1>
+        </div>
+
+        <div className="victory-screen">
+          <div className="victory-card">
+            <div className="trophy-animation">🏆</div>
+            <h2>You're an Amazing Explorer!</h2>
+            <p>You found all {searchItems.length + 1} items including the mystery item!</p>
+            
+            <div className="final-gallery">
+              <h3>Your Collection:</h3>
+              <div className="gallery-grid">
+                {uploadedImages.map((item, index) => (
+                  <div key={index} className="gallery-item">
+                    <img src={item.imageUrl} alt={item.itemName} />
+                    <p>{item.itemName}</p>
+                    <span className="timestamp">{item.timestamp}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button onClick={handleStartGame} className="play-again-btn">
+              🔄 Play Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (showMystery && !mysteryRevealed) {
+    const mysteryItem = mysteryItems[Math.floor(Math.random() * mysteryItems.length)];
     
-    setFoundItems([...foundItems, itemId]);
-    
-    // Play success sound effect (visual feedback)
-    const item = currentLevelData.items.find(i => i.id === itemId);
-    if (item) {
-      // Visual feedback handled by CSS
-    }
-  };
+    return (
+      <div className="scavenger-hunt">
+        <div className="hunt-header">
+          <Link to="/junior-computers" className="back-btn">← Back</Link>
+          <h1>🎁 Mystery Box!</h1>
+        </div>
 
-  const nextLevel = () => {
-    if (currentLevel < 10) {
-      setCurrentLevel(prev => prev + 1);
-      setFoundItems([]);
-      setLevelComplete(false);
-      setGameActive(false);
-      setShowHint(false);
-    }
-  };
+        <div className="mystery-screen">
+          <div className="mystery-card">
+            <div className="mystery-box-animation">
+              🎁
+            </div>
+            <h2>You Unlocked the Mystery Box!</h2>
+            <p className="mystery-intro">One final challenge awaits...</p>
 
-  const resetLevel = () => {
-    setFoundItems([]);
-    setTimeRemaining(currentLevelData.timeLimit);
-    setGameActive(false);
-    setLevelComplete(false);
-    setShowHint(false);
-  };
+            <div className="mystery-item-card">
+              <div className="mystery-item-header">
+                <span className="mystery-emoji">{mysteryItem.emoji}</span>
+                <h3>{mysteryItem.name}</h3>
+              </div>
+              <p className="mystery-hint">💡 {mysteryItem.hint}</p>
+            </div>
 
-  const getItemPosition = (item) => {
-    return {
-      left: `${item.x}%`,
-      top: `${item.y}%`
-    };
-  };
+            <div className="upload-section mystery-upload">
+              <h4>Upload Your Mystery Find:</h4>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleMysteryImageUpload}
+                id="mystery-upload"
+                className="file-input"
+              />
+              <label htmlFor="mystery-upload" className="upload-btn mystery">
+                📤 Upload Mystery Image
+              </label>
+            </div>
+
+            <div className="progress-summary">
+              <p>Items Found: {uploadedImages.length} / {searchItems.length + 1}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentItem = searchItems[currentItemIndex];
 
   return (
     <div className="scavenger-hunt">
-      <div className="activity-header">
-        <button onClick={() => navigate(-1)} className="back-button">
-          ← Back
-        </button>
-        <h1>🔍 Scavenger Hunt</h1>
-        <p className="activity-subtitle">Find hidden tech items in 10 exciting levels!</p>
+      <div className="hunt-header">
+        <Link to="/junior-computers" className="back-btn">← Back</Link>
+        <h1>🔍 Google Image Scavenger Hunt</h1>
       </div>
 
-      <div className="coming-soon-container">
-        <div className="coming-soon-content">
-          <div className="coming-soon-icon">🚧</div>
-          <h2>Coming Soon!</h2>
-          <p className="coming-soon-text">
-            The Scavenger Hunt is currently under development.
-          </p>
-          <p className="coming-soon-description">
-            We're working hard to create an amazing scavenger hunt experience where you'll find hidden tech items across 10 exciting levels!
-          </p>
-          <div className="coming-soon-features">
-            <div className="feature-item">🔍 Find hidden items</div>
-            <div className="feature-item">⏱️ Race against time</div>
-            <div className="feature-item">🏆 Earn points and badges</div>
-            <div className="feature-item">🎮 10 challenging levels</div>
-          </div>
-          <button onClick={() => navigate(-1)} className="back-to-activities-btn">
-            ← Back
-          </button>
-        </div>
-      </div>
-
-      {/* Commented out for coming soon
       <div className="hunt-container">
-        <div className="hunt-sidebar">
-          <div className="level-info-hunt">
-            <div className="level-badge-hunt" style={{ backgroundColor: currentLevelData.color }}>
-              <span className="level-theme-hunt">{currentLevelData.theme}</span>
-              <div>
-                <h2>Level {currentLevel}</h2>
-                <p>{currentLevelData.title}</p>
-              </div>
-            </div>
-            <div className="level-description-hunt">
-              <p>{currentLevelData.description}</p>
-            </div>
+        <div className="progress-bar-hunt">
+          <div className="progress-fill-hunt" style={{ width: `${(uploadedImages.length / searchItems.length) * 100}%` }}></div>
+          <span className="progress-text-hunt">{uploadedImages.length} / {searchItems.length} Items Found</span>
+        </div>
+
+        <div className="current-item-card">
+          <div className="item-badge" style={{ background: getDifficultyColor(currentItem.difficulty) }}>
+            Item {currentItemIndex + 1} of {searchItems.length}
+          </div>
+          
+          <div className="item-emoji">{currentItem.emoji}</div>
+          <h2 className="item-name">{currentItem.name}</h2>
+          <p className="item-hint">💡 {currentItem.hint}</p>
+          <p className="difficulty-tag" style={{ color: getDifficultyColor(currentItem.difficulty) }}>
+            {currentItem.difficulty.toUpperCase()}
+          </p>
+
+          <div className="search-instructions">
+            <h3>🔎 How to Find:</h3>
+            <ol>
+              <li>Open Google Images in a new tab</li>
+              <li>Search for: <strong>"{currentItem.name}"</strong></li>
+              <li>Right-click on an image</li>
+              <li>Click "Save image as..."</li>
+              <li>Come back and upload it below!</li>
+            </ol>
           </div>
 
-          <div className="hunt-stats">
-            <div className="stat-card-hunt">
-              <span className="stat-label-hunt">Items Found</span>
-              <span className="stat-value-hunt">
-                {foundItems.length} / {currentLevelData.items.length}
-              </span>
-            </div>
-            <div className="stat-card-hunt">
-              <span className="stat-label-hunt">Time Left</span>
-              <span className={`stat-value-hunt ${timeRemaining < 10 ? 'time-warning' : ''}`}>
-                {timeRemaining}s
-              </span>
-            </div>
-            <div className="stat-card-hunt">
-              <span className="stat-label-hunt">Score</span>
-              <span className="stat-value-hunt">{score}</span>
-            </div>
+          <div className="upload-section">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              id="image-upload"
+              className="file-input"
+            />
+            <label htmlFor="image-upload" className="upload-btn">
+              📤 Upload Image
+            </label>
           </div>
+        </div>
 
-          <div className="items-to-find">
-            <h3>🔍 Find These Items:</h3>
-            <div className="items-list">
-              {currentLevelData.items.map(item => (
-                <div
-                  key={item.id}
-                  className={`item-check ${foundItems.includes(item.id) ? 'found' : ''}`}
-                >
-                  <span className="item-emoji-check">{item.emoji}</span>
-                  <span className="item-name-check">{item.name}</span>
-                  {foundItems.includes(item.id) && <span className="check-mark">✓</span>}
+        {uploadedImages.length > 0 && (
+          <div className="found-items-section">
+            <h3>✅ Items You've Found:</h3>
+            <div className="found-items-grid">
+              {uploadedImages.map((item, index) => (
+                <div key={index} className="found-item">
+                  <img src={item.imageUrl} alt={item.itemName} />
+                  <p>{item.itemName}</p>
+                  <span className="check-mark">✓</span>
                 </div>
               ))}
             </div>
           </div>
-
-          <div className="hunt-controls">
-            {!gameActive && !levelComplete && (
-              <button onClick={startLevel} className="start-btn-hunt">
-                ▶️ Start Hunt
-              </button>
-            )}
-            {gameActive && (
-              <button onClick={() => setShowHint(!showHint)} className="hint-btn">
-                {showHint ? '🙈 Hide Hints' : '💡 Show Hints'}
-              </button>
-            )}
-            {levelComplete && currentLevel < 10 && (
-              <button onClick={nextLevel} className="next-btn-hunt">
-                Continue to Level {currentLevel + 1} →
-              </button>
-            )}
-            {levelComplete && currentLevel === 10 && (
-              <div className="all-complete-hunt">
-                <h4>🏆 Congratulations!</h4>
-                <p>You completed all 10 levels!</p>
-                <p className="final-score-hunt">Final Score: {score}</p>
-                <button onClick={() => {
-                  setCurrentLevel(1);
-                  setScore(0);
-                  resetLevel();
-                }} className="play-again-hunt">
-                  Play Again
-                </button>
-              </div>
-            )}
-            <button onClick={resetLevel} className="reset-btn-hunt">
-              🔄 Reset Level
-            </button>
-          </div>
-
-          <div className="level-progress-hunt">
-            <h4>Select Level</h4>
-            <div className="levels-grid-hunt">
-              {levelData.map((lvl) => {
-                const activityId = 'scavenger-hunt';
-                const unlocked = isLevelUnlocked(activityId, lvl.level);
-                
-                return (
-                  <div
-                    key={lvl.level}
-                    className={`level-dot-hunt ${lvl.level === currentLevel ? 'active' : ''} ${!unlocked ? 'locked' : ''}`}
-                    style={{ 
-                      backgroundColor: lvl.color,
-                      opacity: unlocked ? 1 : 0.4,
-                      cursor: unlocked ? 'pointer' : 'not-allowed'
-                    }}
-                    title={unlocked ? `Level ${lvl.level}: ${lvl.title}` : `🔒 Complete previous levels to unlock`}
-                    onClick={() => {
-                      if (unlocked) {
-                        setCurrentLevel(lvl.level);
-                        resetLevel();
-                      }
-                    }}
-                  >
-                    {!unlocked ? '🔒' : (lvl.level === currentLevel ? lvl.theme : lvl.level)}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="hunt-area">
-          <div className="hunt-canvas">
-            {!gameActive && !levelComplete && (
-              <div className="start-screen">
-                <h3>🔍 Ready to Hunt?</h3>
-                <p>Click "Start Hunt" to begin finding items!</p>
-                <p className="instruction-text">
-                  Find all {currentLevelData.items.length} item{currentLevelData.items.length !== 1 ? 's' : ''} before time runs out!
-                </p>
-              </div>
-            )}
-
-            {gameActive && currentLevelData.items.map(item => {
-              const isFound = foundItems.includes(item.id);
-              return (
-                <div
-                  key={item.id}
-                  className={`hunt-item ${isFound ? 'found' : ''} ${showHint ? 'hint-visible' : ''}`}
-                  style={getItemPosition(item)}
-                  onClick={() => handleItemClick(item.id)}
-                >
-                  <div className="item-emoji">{item.emoji}</div>
-                  {showHint && !isFound && (
-                    <div className="item-hint">{item.hint}</div>
-                  )}
-                  {isFound && (
-                    <div className="found-effect">✓</div>
-                  )}
-                </div>
-              );
-            })}
-
-            {levelComplete && (
-              <div className="level-complete-screen">
-                <h3>🎉 Level Complete!</h3>
-                <p>You found all {currentLevelData.items.length} items!</p>
-                <p className="time-bonus">Time Bonus: +{timeRemaining * 10} points</p>
-                <p className="level-score">Level Score: {(currentLevelData.items.length * 100) + (timeRemaining * 10)}</p>
-              </div>
-            )}
-
-            {gameActive && timeRemaining === 0 && (
-              <div className="time-up-screen">
-                <h3>⏰ Time's Up!</h3>
-                <p>You found {foundItems.length} out of {currentLevelData.items.length} items!</p>
-                <button onClick={resetLevel} className="retry-btn-hunt">
-                  Try Again
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
+        )}
       </div>
-      */}
     </div>
   );
 }
 
 export default ScavengerHunt;
-
