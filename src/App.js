@@ -10,6 +10,7 @@ import KeyboardAdventure from './components/activities/KeyboardAdventure';
 import DigitalArtStudio from './components/activities/DigitalArtStudio';
 import ScavengerHunt from './components/activities/ScavengerHunt';
 import ProgrammingAdventure from './components/activities/ProgrammingAdventure';
+import AdvancedProgramming from './components/activities/AdvancedProgramming';
 import FinalRoundMaze from './components/activities/FinalRoundMaze';
 import './App.css';
 
@@ -70,6 +71,7 @@ function App() {
           <Route path="/activities/digital-art-studio" element={<DigitalArtStudio />} />
           <Route path="/activities/scavenger-hunt" element={<ScavengerHunt />} />
           <Route path="/activities/programming-adventure" element={<ProgrammingAdventure />} />
+          <Route path="/activities/advanced-programming" element={<AdvancedProgramming />} />
           <Route path="/activities/final-round-maze" element={<FinalRoundMaze />} />
         </Routes>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ScavengerHunt.css';
+import { isLevelUnlocked, completeLevel as markLevelComplete } from '../../utils/levelProgress';
 
 function ScavengerHunt() {
   const navigate = useNavigate();
@@ -188,8 +189,10 @@ function ScavengerHunt() {
       const timeBonus = Math.max(0, timeRemaining * 10);
       const levelScore = (currentLevelData.items.length * 100) + timeBonus;
       setScore(prev => prev + levelScore);
+      // Mark level as completed in localStorage
+      markLevelComplete('scavenger-hunt', currentLevel);
     }
-  }, [foundItems, currentLevelData.items.length, gameActive, timeRemaining]);
+  }, [foundItems, currentLevelData.items.length, gameActive, timeRemaining, currentLevel]);
 
   const startLevel = () => {
     setFoundItems([]);
@@ -357,20 +360,31 @@ function ScavengerHunt() {
           <div className="level-progress-hunt">
             <h4>Select Level</h4>
             <div className="levels-grid-hunt">
-              {levelData.map((lvl) => (
-                <div
-                  key={lvl.level}
-                  className={`level-dot-hunt ${lvl.level === currentLevel ? 'active' : ''}`}
-                  style={{ backgroundColor: lvl.color }}
-                  title={`Level ${lvl.level}: ${lvl.title}`}
-                  onClick={() => {
-                    setCurrentLevel(lvl.level);
-                    resetLevel();
-                  }}
-                >
-                  {lvl.level === currentLevel ? lvl.theme : lvl.level}
-                </div>
-              ))}
+              {levelData.map((lvl) => {
+                const activityId = 'scavenger-hunt';
+                const unlocked = isLevelUnlocked(activityId, lvl.level);
+                
+                return (
+                  <div
+                    key={lvl.level}
+                    className={`level-dot-hunt ${lvl.level === currentLevel ? 'active' : ''} ${!unlocked ? 'locked' : ''}`}
+                    style={{ 
+                      backgroundColor: lvl.color,
+                      opacity: unlocked ? 1 : 0.4,
+                      cursor: unlocked ? 'pointer' : 'not-allowed'
+                    }}
+                    title={unlocked ? `Level ${lvl.level}: ${lvl.title}` : `🔒 Complete previous levels to unlock`}
+                    onClick={() => {
+                      if (unlocked) {
+                        setCurrentLevel(lvl.level);
+                        resetLevel();
+                      }
+                    }}
+                  >
+                    {!unlocked ? '🔒' : (lvl.level === currentLevel ? lvl.theme : lvl.level)}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

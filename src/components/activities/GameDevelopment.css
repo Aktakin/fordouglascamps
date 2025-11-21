@@ -1,0 +1,287 @@
+.game-development-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+.game-dev-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.back-to-advanced {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.back-to-advanced:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-5px);
+}
+
+.game-dev-header h1 {
+  color: white;
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.game-dev-subtitle {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.game-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+}
+
+.game-project-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.game-project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.game-project-card.featured {
+  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  color: white;
+  border: 3px solid gold;
+}
+
+.game-project-card.featured::before {
+  background: linear-gradient(90deg, gold, #ffd700, gold);
+  height: 5px;
+}
+
+.game-project-card.featured .game-project-title,
+.game-project-card.featured .game-project-description {
+  color: white;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: gold;
+  color: #19547b;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+}
+
+.game-project-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.game-project-title {
+  font-size: 1.8rem;
+  color: #667eea;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.game-project-description {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.game-project-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.skill-badge-game {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.game-project-card.featured .skill-badge-game {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.start-game-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-game-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.game-project-card.featured .start-game-btn {
+  background: white;
+  color: #19547b;
+}
+
+.game-project-card.featured .start-game-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.game-dev-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.learning-path {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.learning-path h3 {
+  text-align: center;
+  color: #667eea;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.path-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.path-step {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.path-step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.path-step.featured-step {
+  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  color: white;
+}
+
+.path-step.featured-step .step-number {
+  background: gold;
+  color: #19547b;
+}
+
+.path-step.featured-step h4,
+.path-step.featured-step p {
+  color: white;
+}
+
+.step-number {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-content h4 {
+  color: #667eea;
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+.step-content p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .game-dev-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .game-dev-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .back-to-advanced {
+    position: static;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .game-projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .path-steps {
+    grid-template-columns: 1fr;
+  }
+}
+

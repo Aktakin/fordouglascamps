@@ -722,6 +722,191 @@
   margin-top: 1rem;
 }
 
+/* Programming Selection Styles */
+.activity-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: white;
+  position: relative;
+}
+
+.activity-header .back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+
+.activity-header .back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-5px);
+}
+
+.activity-header h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.activity-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.programming-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 2rem;
+}
+
+.programming-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.programming-option-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  padding: 3rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.programming-option-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #4ecdc4, #44a08d);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.programming-option-card:hover::before {
+  transform: scaleX(1);
+}
+
+.programming-option-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.programming-option-card.advanced::before {
+  background: linear-gradient(90deg, #ff6b6b, #ff8787);
+}
+
+.programming-option-card.advanced {
+  border: 2px solid rgba(255, 107, 107, 0.3);
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.15) 100%);
+}
+
+.programming-option-card.advanced:hover {
+  border-color: rgba(255, 107, 107, 0.5);
+  box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+}
+
+.programming-option-card h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.programming-option-card .card-description {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.card-features span {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.8rem 1.2rem;
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.card-features span:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(5px);
+}
+
+.difficulty-badge {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.difficulty-badge.beginner {
+  background: rgba(78, 205, 196, 0.3);
+  color: #4ecdc4;
+  border: 2px solid #4ecdc4;
+}
+
+.difficulty-badge.advanced {
+  background: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+}
+
+.select-card-btn {
+  background: linear-gradient(135deg, #3b88f5 0%, #6594e0 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: 'Fredoka', sans-serif;
+  box-shadow: 0 8px 20px rgba(59, 136, 245, 0.3);
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.programming-option-card:hover .select-card-btn {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(59, 136, 245, 0.4);
+}
+
 @media (max-width: 768px) {
   .activities-container {
     grid-template-columns: 1fr;
@@ -738,6 +923,19 @@
   .calc-btn {
     padding: 1rem;
     font-size: 1.2rem;
+  }
+
+  .programming-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .activity-header .back-button {
+    position: relative;
+    margin-bottom: 1rem;
   }
 }
 

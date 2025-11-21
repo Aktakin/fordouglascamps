@@ -642,6 +642,11 @@
   font-weight: 600;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   z-index: 7;
+  /* Prevent text selection and copying */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .item-hint::before {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './KeyboardAdventure.css';
+import { isLevelUnlocked, completeLevel as markLevelComplete } from '../../utils/levelProgress';
 
 const levelData = [
     {
@@ -330,6 +331,9 @@ function KeyboardAdventure() {
     const score = 1000; // Bonus score for completing special keys
     setLevelScore(score);
     setTotalScore(prev => prev + score);
+    
+    // Mark level as completed in localStorage
+    markLevelComplete('keyboard-adventure', currentLevel);
   };
 
   const completeLevel = () => {
@@ -351,6 +355,9 @@ function KeyboardAdventure() {
     setTotalScore(prev => prev + score);
     setLevelComplete(true);
     setShowResults(true);
+    
+    // Mark level as completed in localStorage
+    markLevelComplete('keyboard-adventure', currentLevel);
   };
 
   const startNextLevel = () => {
@@ -609,22 +616,31 @@ function KeyboardAdventure() {
 
           <div className="level-progress-indicator">
             <div className="levels-grid">
-              {levelData.map((lvl) => (
-                <div
-                  key={lvl.level}
-                  className={`level-dot ${lvl.level === currentLevel ? 'active' : ''}`}
-                  style={{ 
-                    backgroundColor: lvl.color
-                  }}
-                  title={`Level ${lvl.level}: ${lvl.title}`}
-                  onClick={() => {
-                    setCurrentLevel(lvl.level);
-                    resetLevel();
-                  }}
-                >
-                  {lvl.level === currentLevel ? lvl.theme : lvl.level}
-                </div>
-              ))}
+              {levelData.map((lvl) => {
+                const activityId = 'keyboard-adventure';
+                const unlocked = isLevelUnlocked(activityId, lvl.level);
+                
+                return (
+                  <div
+                    key={lvl.level}
+                    className={`level-dot ${lvl.level === currentLevel ? 'active' : ''} ${!unlocked ? 'locked' : ''}`}
+                    style={{ 
+                      backgroundColor: lvl.color,
+                      opacity: unlocked ? 1 : 0.4,
+                      cursor: unlocked ? 'pointer' : 'not-allowed'
+                    }}
+                    title={unlocked ? `Level ${lvl.level}: ${lvl.title}` : `🔒 Complete previous levels to unlock`}
+                    onClick={() => {
+                      if (unlocked) {
+                        setCurrentLevel(lvl.level);
+                        resetLevel();
+                      }
+                    }}
+                  >
+                    {!unlocked ? '🔒' : (lvl.level === currentLevel ? lvl.theme : lvl.level)}
+                  </div>
+                );
+              })}
             </div>
             <div className="level-selector-keyboard">
               <label htmlFor="levelSelectKeyboard">Jump to Level:</label>
@@ -632,16 +648,22 @@ function KeyboardAdventure() {
                 id="levelSelectKeyboard"
                 value={currentLevel}
                 onChange={(e) => {
-                  setCurrentLevel(parseInt(e.target.value));
-                  resetLevel();
+                  const selectedLevel = parseInt(e.target.value);
+                  if (isLevelUnlocked('keyboard-adventure', selectedLevel)) {
+                    setCurrentLevel(selectedLevel);
+                    resetLevel();
+                  }
                 }}
                 className="level-select-keyboard"
               >
-                {levelData.map((lvl) => (
-                  <option key={lvl.level} value={lvl.level}>
-                    Level {lvl.level}: {lvl.title}
-                  </option>
-                ))}
+                {levelData.map((lvl) => {
+                  const unlocked = isLevelUnlocked('keyboard-adventure', lvl.level);
+                  return (
+                    <option key={lvl.level} value={lvl.level} disabled={!unlocked}>
+                      {unlocked ? `Level ${lvl.level}: ${lvl.title}` : `🔒 Level ${lvl.level} (Locked)`}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

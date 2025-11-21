@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './FinalRoundMaze.css';
+import { completeLevel as markLevelComplete } from '../../utils/levelProgress';
 
 const themes = {
   roblox: {
@@ -475,6 +476,8 @@ function smartMove() {
     // Check if reached goal
     if (newPos.x === goalPos.x && newPos.y === goalPos.y) {
       setGameState('level-complete');
+      // Mark level as completed in localStorage
+      markLevelComplete('final-round-maze', currentLevel);
     }
   };
 
@@ -560,6 +563,8 @@ function smartMove() {
       setTimeout(() => {
         if (playerPos.x === goalPos.x && playerPos.y === goalPos.y) {
           setGameState('level-complete');
+          // Mark level as completed in localStorage
+          markLevelComplete('final-round-maze', currentLevel);
         }
       }, 100);
     } catch (error) {

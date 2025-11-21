@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ProgrammingAdventure.css';
+import { isLevelUnlocked, completeLevel } from '../../utils/levelProgress';
 
 function ProgrammingAdventure() {
   const navigate = useNavigate();
@@ -566,8 +567,12 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
     const code = userCode || levelData.startingCode || '';
     if (levelData.expectedOutput && result && result.includes(levelData.expectedOutput)) {
       setLevelComplete(true);
+      // Mark level as completed in localStorage
+      completeLevel(`programming-${language}-${topic}`, currentLevel);
     } else if (levelData.checkFunction && levelData.checkFunction(code, result)) {
       setLevelComplete(true);
+      // Mark level as completed in localStorage
+      completeLevel(`programming-${language}-${topic}`, currentLevel);
     }
   };
 
@@ -666,14 +671,35 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
               {showHint ? '🙈 Hide Hint & Example' : '💡 Show Hint & Example'}
             </button>
             {showHint && levelData.hint && (
-              <div className="hint-box">
+              <div 
+                className="hint-box"
+                onCopy={(e) => e.preventDefault()}
+                onCut={(e) => e.preventDefault()}
+                onPaste={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
+                onContextMenu={(e) => e.preventDefault()}
+              >
                 <p>{levelData.hint}</p>
               </div>
             )}
             {showExample && levelData.example && (
-              <div className="example-box">
+              <div 
+                className="example-box"
+                onCopy={(e) => e.preventDefault()}
+                onCut={(e) => e.preventDefault()}
+                onPaste={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
+                onContextMenu={(e) => e.preventDefault()}
+              >
                 <h3>💡 Example</h3>
-                <pre className="code-example">{levelData.example}</pre>
+                <pre 
+                  className="code-example"
+                  onCopy={(e) => e.preventDefault()}
+                  onCut={(e) => e.preventDefault()}
+                  onPaste={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
+                >{levelData.example}</pre>
               </div>
             )}
           </div>
@@ -681,22 +707,32 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
           <div className="level-progress-programming">
             <h4>Progress</h4>
             <div className="levels-grid-programming">
-              {Array.from({ length: 10 }, (_, i) => i + 1).map(level => (
-                <div
-                  key={level}
-                  className={`level-dot-programming ${level === currentLevel ? 'active' : ''} ${level < currentLevel ? 'completed' : ''}`}
-                  style={{ 
-                    backgroundColor: level <= currentLevel ? currentTopicData.color : '#ccc'
-                  }}
-                  onClick={() => {
-                    setCurrentLevel(level);
-                    resetLevel();
-                  }}
-                  title={`Level ${level}`}
-                >
-                  {level < currentLevel ? '✓' : level === currentLevel ? currentTopicData.icon : level}
-                </div>
-              ))}
+              {Array.from({ length: 10 }, (_, i) => i + 1).map(level => {
+                const activityId = `programming-${language}-${topic}`;
+                const unlocked = isLevelUnlocked(activityId, level);
+                const isCompleted = level < currentLevel;
+                
+                return (
+                  <div
+                    key={level}
+                    className={`level-dot-programming ${level === currentLevel ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${!unlocked ? 'locked' : ''}`}
+                    style={{ 
+                      backgroundColor: unlocked ? (level <= currentLevel ? currentTopicData.color : '#ccc') : '#555',
+                      opacity: unlocked ? 1 : 0.4,
+                      cursor: unlocked ? 'pointer' : 'not-allowed'
+                    }}
+                    onClick={() => {
+                      if (unlocked) {
+                        setCurrentLevel(level);
+                        resetLevel();
+                      }
+                    }}
+                    title={unlocked ? `Level ${level}` : `🔒 Complete previous levels to unlock`}
+                  >
+                    {!unlocked ? '🔒' : (isCompleted ? '✓' : level === currentLevel ? currentTopicData.icon : level)}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

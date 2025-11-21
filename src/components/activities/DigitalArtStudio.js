@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './DigitalArtStudio.css';
+import { isLevelUnlocked, completeLevel as markLevelComplete } from '../../utils/levelProgress';
 
 function DigitalArtStudio() {
   const navigate = useNavigate();
@@ -183,6 +184,8 @@ function DigitalArtStudio() {
 
   const completeLevel = () => {
     setLevelComplete(true);
+    // Mark level as completed in localStorage
+    markLevelComplete('digital-art-studio', currentLevel);
   };
 
   const nextLevel = () => {
@@ -325,23 +328,32 @@ function DigitalArtStudio() {
           <div className="level-progress-art">
             <h4>Select Level</h4>
             <div className="levels-grid-art">
-              {levelData.map((lvl) => (
-                <div
-                  key={lvl.level}
-                  className={`level-dot-art ${lvl.level === currentLevel ? 'active' : ''}`}
-                  style={{ 
-                    backgroundColor: lvl.color
-                  }}
-                  title={`Level ${lvl.level}: ${lvl.title}`}
-                  onClick={() => {
-                    setCurrentLevel(lvl.level);
-                    setLevelComplete(false);
-                    clearCanvas();
-                  }}
-                >
-                  {lvl.level === currentLevel ? lvl.theme : lvl.level}
-                </div>
-              ))}
+              {levelData.map((lvl) => {
+                const activityId = 'digital-art-studio';
+                const unlocked = isLevelUnlocked(activityId, lvl.level);
+                
+                return (
+                  <div
+                    key={lvl.level}
+                    className={`level-dot-art ${lvl.level === currentLevel ? 'active' : ''} ${!unlocked ? 'locked' : ''}`}
+                    style={{ 
+                      backgroundColor: lvl.color,
+                      opacity: unlocked ? 1 : 0.4,
+                      cursor: unlocked ? 'pointer' : 'not-allowed'
+                    }}
+                    title={unlocked ? `Level ${lvl.level}: ${lvl.title}` : `🔒 Complete previous levels to unlock`}
+                    onClick={() => {
+                      if (unlocked) {
+                        setCurrentLevel(lvl.level);
+                        setLevelComplete(false);
+                        clearCanvas();
+                      }
+                    }}
+                  >
+                    {!unlocked ? '🔒' : (lvl.level === currentLevel ? lvl.theme : lvl.level)}
+                  </div>
+                );
+              })}
             </div>
             <div className="level-selector-dropdown">
               <label htmlFor="levelSelect">Jump to Level:</label>
@@ -349,17 +361,23 @@ function DigitalArtStudio() {
                 id="levelSelect"
                 value={currentLevel}
                 onChange={(e) => {
-                  setCurrentLevel(parseInt(e.target.value));
-                  setLevelComplete(false);
-                  clearCanvas();
+                  const selectedLevel = parseInt(e.target.value);
+                  if (isLevelUnlocked('digital-art-studio', selectedLevel)) {
+                    setCurrentLevel(selectedLevel);
+                    setLevelComplete(false);
+                    clearCanvas();
+                  }
                 }}
                 className="level-select"
               >
-                {levelData.map((lvl) => (
-                  <option key={lvl.level} value={lvl.level}>
-                    Level {lvl.level}: {lvl.title}
-                  </option>
-                ))}
+                {levelData.map((lvl) => {
+                  const unlocked = isLevelUnlocked('digital-art-studio', lvl.level);
+                  return (
+                    <option key={lvl.level} value={lvl.level} disabled={!unlocked}>
+                      {unlocked ? `Level ${lvl.level}: ${lvl.title}` : `🔒 Level ${lvl.level} (Locked)`}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './MouseSkillsChallenge.css';
+import { completeLevel as markLevelComplete } from '../../utils/levelProgress';
 
 function MouseSkillsChallenge() {
   const navigate = useNavigate();
@@ -1079,6 +1080,8 @@ function MouseSkillsChallenge() {
                           // Check if level is complete
                           if (remainingItems.length === 0) {
                             setLevelComplete(true);
+                            // Mark level as completed in localStorage
+                            markLevelComplete('mouse-skills-challenge', currentLevel);
                             if (currentLevel < 10) {
                               setTimeout(() => {
                                 const nextLevel = currentLevel + 1;
