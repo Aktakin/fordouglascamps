@@ -236,6 +236,23 @@ function ScavengerHunt() {
 
   const currentItem = searchItems[currentItemIndex];
 
+  // Wait for items to load
+  if (!currentItem) {
+    return (
+      <div className="scavenger-hunt">
+        <div className="hunt-header">
+          <Link to="/junior-computers" className="back-btn">← Back</Link>
+          <h1>🔍 Google Image Scavenger Hunt</h1>
+        </div>
+        <div className="hunt-container">
+          <div className="current-item-card">
+            <p>Loading items...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="scavenger-hunt">
       <div className="hunt-header">
