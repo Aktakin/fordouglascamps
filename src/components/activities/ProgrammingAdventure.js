@@ -173,7 +173,7 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
   const [levelComplete, setLevelComplete] = useState(false);
   const [variables, setVariables] = useState({});
   const [showTeaching, setShowTeaching] = useState(true);
-  const [tapCount, setTapCount] = useState(0);
+  const tapCountRef = useRef(0);
   const tapTimeoutRef = useRef(null);
 
   const topicData = {
@@ -220,6 +220,15 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
       setShowTeaching(true);
     }
   }, [currentLevel, topic, language]);
+
+  // Cleanup tap timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tapTimeoutRef.current) {
+        clearTimeout(tapTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const extractVariables = (code) => {
     const vars = {};
@@ -599,22 +608,23 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
     // Clear existing timeout
     if (tapTimeoutRef.current) {
       clearTimeout(tapTimeoutRef.current);
+      tapTimeoutRef.current = null;
     }
 
-    // Increment tap count
-    const newTapCount = tapCount + 1;
-    setTapCount(newTapCount);
+    // Increment tap count using ref (immediate, no async issues)
+    tapCountRef.current = tapCountRef.current + 1;
+    const currentTapCount = tapCountRef.current;
 
     // If triple-tapped, use admin override (works even if level not complete)
-    if (newTapCount >= 3) {
-      setTapCount(0);
+    if (currentTapCount >= 3) {
+      tapCountRef.current = 0;
       nextLevel(true); // Pass true to indicate admin override
       return;
     }
 
-    // If level is complete, proceed normally
-    if (levelComplete) {
-      setTapCount(0);
+    // If level is complete, proceed normally on first tap
+    if (levelComplete && currentTapCount === 1) {
+      tapCountRef.current = 0;
       nextLevel(false);
       return;
     }
@@ -622,7 +632,7 @@ function TopicLearning({ language, topic, currentLevel, setCurrentLevel, setCurr
     // If level not complete, wait for more taps (triple-tap override)
     // Reset tap count after 1 second if no more taps
     tapTimeoutRef.current = setTimeout(() => {
-      setTapCount(0);
+      tapCountRef.current = 0;
     }, 1000);
   };
 
@@ -1613,10 +1623,6 @@ function TopicTeaching({ topic, language, topicData, onStart, onBack }) {
       if (loopIntervalRef.current) {
         clearInterval(loopIntervalRef.current);
         loopIntervalRef.current = null;
-      }
-      // Cleanup tap timeout
-      if (tapTimeoutRef.current) {
-        clearTimeout(tapTimeoutRef.current);
       }
     };
   }, [topic]);
